@@ -1,0 +1,66 @@
+.services {
+    background-image: linear-gradient(
+        rgba(0, 0, 0, 0.7),
+        rgba(0, 0, 0, 0.7)),
+        url('../../assets/images/fondoServiciosIndividuales.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    padding: 100px 0;
+}
+
+.servicesContent {
+    text-align: center;
+}
+
+.servicesContent h2 {
+    font-size: 55px;
+    line-height: 70px;
+    color: #F9FAFC;
+    text-transform: uppercase;
+    margin-bottom: 50px;
+}
+
+.servicesContent p {
+    font-size: 16px;
+    color: #C5C5C5;
+    margin-bottom: 50px;
+    padding: 0 100px;
+}
+
+.servicesGroup {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 50px;
+}
+
+.services1 {
+    padding: 0 100px;
+}
+
+.services1 img {
+    width: 55px;
+    margin-bottom: 45px;
+}
+
+.services1 h3 {
+    color: #F9FAFC;
+    font-size: 18px;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .servicesGroup {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .services1 {
+        padding: 20px 0;
+    }
+
+    .servicesContent p {
+        padding: 0 20px;
+    }
+}

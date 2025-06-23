@@ -1,0 +1,62 @@
+.general {
+    display: flex;
+    min-height: 500px; /* Ajusta según necesites */
+}
+
+.general1 {
+    width: 50%;
+    padding: 100px;
+    background-color: #bbccd4;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.general1 h2 {
+    font-size: 55px;
+    line-height: 70px;
+    color: #323337;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.general1 p {
+    font-size: 16px;
+    color: #414247;
+    margin: 15px 0;
+}
+
+.general2, .general3 {
+    width: 50%;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .general {
+        flex-direction: column;
+    }
+
+    .general1, .general2, .general3 {
+        width: 100%;
+        padding: 50px 20px;
+    }
+
+    .general1 h2 {
+        font-size: 40px;
+        line-height: 50px;
+    }
+}
+
+@media (max-width: 480px) {
+    .general1 {
+        padding: 50px 15px;
+    }
+
+    .general1 h2 {
+        font-size: 32px;
+        line-height: 40px;
+    }
+}
