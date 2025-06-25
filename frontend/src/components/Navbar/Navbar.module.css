@@ -1,0 +1,43 @@
+.navbar {
+  display: flex;
+}
+
+.navbar ul {
+  display: flex;
+  list-style: none;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar ul li a {
+  color: #fff;
+  font-weight: 600;
+  padding: 10px 20px;
+  display: block;
+  text-decoration: none;
+}
+
+.navbar ul li a:hover {
+  color: #5a6f80;
+}
+
+/* Estilos para móvil */
+@media (max-width: 768px) {
+  .navbar {
+    position: fixed;
+    top: 80px;
+    left: -100%;
+    width: 100%;
+    background-color: #24475E;
+    transition: all 0.3s;
+  }
+  
+  .navbar.active {
+    left: 0;
+  }
+  
+  .navbar ul {
+    flex-direction: column;
+  }
+}

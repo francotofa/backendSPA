@@ -1,0 +1,215 @@
+/* Estilos generales */
+.serviciosSection {
+  font-family: 'Poppins', sans-serif;
+  background-color: #bbccd4;
+  padding: 80px 0;
+}
+
+/* Estilos para tarjetas de servicios individuales */
+.servicioCard {
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  margin-bottom: 40px;
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto 40px;
+}
+
+.servicioImagen {
+  width: 40%;
+  background-size: cover;
+  background-position: center;
+}
+
+.servicioContenido {
+  width: 60%;
+  padding: 30px;
+}
+
+.servicioContenido h3 {
+  color: #5a6f80;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.servicioContenido ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.servicioContenido li {
+  margin-bottom: 10px;
+  color: #555;
+  font-size: 16px;
+  position: relative;
+  padding-left: 25px;
+}
+
+.servicioContenido li span {
+  position: absolute;
+  left: 0;
+  color: #bbccd4;
+}
+
+/* Estilos para la información de precio y duración */
+.servicioInfo {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.servicioPrecio, .servicioDuracion {
+  font-weight: 600;
+  color: #5a6f80;
+}
+
+.servicioPrecio {
+  font-size: 22px;
+}
+
+.servicioDuracion {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Estilos para los botones */
+.btnAgregar {
+  display: inline-block;
+  padding: 10px 25px;
+  background-color: #5a6f80;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-top: 15px;
+}
+
+.btnAgregar:hover {
+  background-color: #3a4f60;
+  transform: translateY(-2px);
+}
+
+.btnAgregar i {
+  margin-right: 8px;
+}
+
+/* Estilos para servicios grupales */
+.serviciosGrupales {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.grupoCard {
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 500px;
+  text-align: left;
+}
+
+.grupoImagen {
+  height: 250px;
+  background-size: cover;
+  background-position: center;
+}
+
+.grupoContenido {
+  position: relative;
+  padding: 30px;
+  padding-bottom: 80px;
+}
+
+.grupoContenido h3 {
+  color: #5a6f80;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.grupoContenido ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.grupoContenido li {
+  margin-bottom: 10px;
+  color: #555;
+  font-size: 16px;
+  position: relative;
+  padding-left: 25px;
+}
+
+.grupoContenido li span {
+  position: absolute;
+  left: 0;
+  color: #bbccd4;
+}
+
+.grupoInfo {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.grupoPrecio {
+  font-weight: 600;
+  color: #5a6f80;
+  font-size: 22px;
+}
+
+.grupoDuracion {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #5a6f80;
+  font-weight: 600;
+}
+
+.grupoBtn {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 60px);
+}
+
+/* Estilos responsive */
+@media (max-width: 768px) {
+  .servicioCard {
+    flex-direction: column;
+  }
+  
+  .servicioImagen,
+  .servicioContenido {
+    width: 100%;
+  }
+  
+  .servicioImagen {
+    height: 250px;
+  }
+  
+  .servicioContenido {
+    padding: 25px;
+  }
+  
+  .servicioContenido h3 {
+    font-size: 24px;
+  }
+  
+  .grupoCard {
+    width: 100%;
+  }
+}

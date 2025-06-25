@@ -1,0 +1,130 @@
+.registerContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  padding: 40px 20px;
+  background-image: linear-gradient(
+      rgba(0, 0, 0, 0.5),
+      rgba(0, 0, 0, 0.5)
+    ),
+    url('../../assets/images/photo-1544161515-4ab6ce6db874.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.formBox {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+}
+
+.formBox h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 8px;
+  color: #555;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.formGroup input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  color: #333;
+  background-color: #fff;
+  transition: all 0.3s ease;
+}
+
+.formGroup input:focus {
+  outline: none;
+  border-color: #ce987b;
+  box-shadow: 0 0 0 2px rgba(206, 152, 123, 0.2);
+}
+
+.terms {
+  display: flex;
+  align-items: center;
+  margin: 25px 0;
+}
+
+.terms input {
+  margin-right: 10px;
+  width: auto;
+}
+
+.terms label {
+  color: #555;
+  font-size: 14px;
+}
+
+.terms a {
+  color: #ce987b;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.terms a:hover {
+  text-decoration: underline;
+}
+
+.submitBtn {
+  width: 100%;
+  padding: 15px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submitBtn:hover {
+  background-color: #555;
+}
+
+.formFooter {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.formFooter p {
+  color: #555;
+  font-size: 14px;
+}
+
+.formFooter a {
+  color: #ce987b;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.formFooter a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .formBox {
+    padding: 30px 20px;
+  }
+}

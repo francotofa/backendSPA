@@ -1,0 +1,90 @@
+.authContainer {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.authFormContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 450px;
+  z-index: 20;
+}
+
+.authForm {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(8px);
+}
+
+.authTitle {
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+}
+
+.inputGroup {
+  margin-bottom: 1.5rem;
+}
+
+.inputGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #34495e;
+  font-weight: 500;
+}
+
+.inputField {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border 0.3s;
+}
+
+.inputField:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.submitAuth {
+  width: 100%;
+  padding: 0.8rem;
+  background: linear-gradient(135deg, #3498db, #2c3e50);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.submitAuth:hover {
+  opacity: 0.9;
+}
+
+.authLinks {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+.authLinks a {
+  color: #3498db;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.authLinks a:hover {
+  color: #2980b9;
+  text-decoration: underline;
+}

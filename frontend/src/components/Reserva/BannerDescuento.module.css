@@ -1,0 +1,42 @@
+.infiniteMarquee {
+  width: 100%;
+  overflow: hidden;
+  background: linear-gradient(to right, #5a6f80, #008080);
+  padding: 25px 0;
+  margin: 0;
+  position: relative;
+}
+
+.marqueeTrack {
+  width: 100%;
+  overflow: hidden;
+}
+
+.marqueeContent {
+  display: inline-block;
+  white-space: nowrap;
+  animation: scrollText 25s linear infinite;
+  padding-right: 100%;
+}
+
+.marqueeContent span {
+  display: inline-block;
+  font-size: 32px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+  padding: 0 40px;
+  position: relative;
+}
+
+@keyframes scrollText {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-33.33%); }
+}
+
+@media (max-width: 768px) {
+  .marqueeContent span {
+    font-size: 24px;
+    padding: 0 25px;
+  }
+}

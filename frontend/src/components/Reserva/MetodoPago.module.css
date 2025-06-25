@@ -1,0 +1,14 @@
+.paymentMethods {
+  margin-top: 20px;
+}
+
+.paymentOption {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.paymentOption input {
+  width: auto;
+  margin-right: 10px;
+}
