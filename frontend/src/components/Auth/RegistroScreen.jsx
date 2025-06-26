@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import styles from './RegistroScreen.module.css';
 
 const RegistroScreen = () => {
@@ -14,6 +15,7 @@ const RegistroScreen = () => {
     terms: false
   });
 
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -26,42 +28,41 @@ const RegistroScreen = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage('');
 
     if (!formData.terms) {
-      alert("Debes aceptar los términos y condiciones.");
+      setErrorMessage("Debes aceptar los términos y condiciones.");
       return;
     }
 
     if (formData.password !== formData.confirm_password) {
-      alert("Las contraseñas no coinciden");
+      setErrorMessage("Las contraseñas no coinciden.");
       return;
     }
 
     try {
-      const response = await fetch("https://backendspa-2.onrender.com/api/auth/registro", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          nombre: formData.nombre,
-          apellido: formData.apellido,
-          dni: formData.dni,
-          email: formData.email,
-          telefono: formData.telefono,
-          password: formData.password
-        })
+      const response = await axios.post('http://localhost:8080/api/auth/registro', {
+        nombre: formData.nombre,
+        apellido: formData.apellido,
+        dni: formData.dni,
+        email: formData.email,
+        telefono: formData.telefono,
+        password: formData.password
       });
 
-      if (response.ok) {
-        alert("Registro exitoso");
-        navigate('/perfil'); // Redirige a perfil o login
+      if (response.status === 200) {
+        alert("Registro exitoso. Ahora podés iniciar sesión.");
+        navigate('/perfil'); // redirige al login
       } else {
-        const error = await response.json();
-        alert("Error en el registro: " + (error.message || JSON.stringify(error)));
+        setErrorMessage("Hubo un problema en el registro.");
       }
     } catch (error) {
-      alert("Error de red o servidor: " + error.message);
+      console.error("Error al registrar:", error);
+      if (error.response && error.response.data) {
+        setErrorMessage(error.response.data);
+      } else {
+        setErrorMessage("Error de red o servidor.");
+      }
     }
   };
 
@@ -82,7 +83,7 @@ const RegistroScreen = () => {
               required
             />
           </div>
-          
+
           <div className={styles.formGroup}>
             <label htmlFor="apellido">Apellido</label>
             <input
@@ -94,7 +95,7 @@ const RegistroScreen = () => {
               required
             />
           </div>
-          
+
           <div className={styles.formGroup}>
             <label htmlFor="dni">DNI</label>
             <input
@@ -106,7 +107,7 @@ const RegistroScreen = () => {
               required
             />
           </div>
-          
+
           <div className={styles.formGroup}>
             <label htmlFor="email">Correo Electrónico</label>
             <input
@@ -118,7 +119,7 @@ const RegistroScreen = () => {
               required
             />
           </div>
-          
+
           <div className={styles.formGroup}>
             <label htmlFor="telefono">Teléfono</label>
             <input
@@ -129,7 +130,7 @@ const RegistroScreen = () => {
               onChange={handleChange}
             />
           </div>
-          
+
           <div className={styles.formGroup}>
             <label htmlFor="password">Contraseña</label>
             <input
@@ -141,7 +142,7 @@ const RegistroScreen = () => {
               required
             />
           </div>
-          
+
           <div className={styles.formGroup}>
             <label htmlFor="confirm_password">Confirmar Contraseña</label>
             <input
@@ -153,7 +154,7 @@ const RegistroScreen = () => {
               required
             />
           </div>
-          
+
           <div className={styles.terms}>
             <input
               type="checkbox"
@@ -163,11 +164,19 @@ const RegistroScreen = () => {
               onChange={handleChange}
               required
             />
-            <label htmlFor="terms">Acepto los <a href="/terminos">Términos y Condiciones</a></label>
+            <label htmlFor="terms">
+              Acepto los <a href="/terminos">Términos y Condiciones</a>
+            </label>
           </div>
-          
+
+          {errorMessage && (
+            <div className={styles.errorMessage}>
+              {errorMessage}
+            </div>
+          )}
+
           <button type="submit" className={styles.submitBtn}>Registrarse</button>
-          
+
           <div className={styles.formFooter}>
             <p>¿Ya tienes una cuenta? <a href="/perfil">Inicia Sesión</a></p>
           </div>

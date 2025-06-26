@@ -1,13 +1,13 @@
 package com.levitacode.apiSPA.repository;
 
-import com.levitacode.apiSPA.model.Turno;
-import com.levitacode.apiSPA.model.EstadoTurno;
-import scala.collection.immutable.List;
-
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import com.levitacode.apiSPA.model.EstadoTurno;
+import com.levitacode.apiSPA.model.Turno;
 
 @Repository
 public interface TurnoRepository extends JpaRepository<Turno, Long> {
@@ -35,4 +35,7 @@ public interface TurnoRepository extends JpaRepository<Turno, Long> {
     
     // O para buscar turnos por profesional y cliente:
     List<Turno> findByProfesionalIdAndClienteId(Integer profesionalId, Integer clienteId);
+
+    List<Turno> findByFecha(LocalDate fecha); // Método para buscar turnos por fecha
+
 }

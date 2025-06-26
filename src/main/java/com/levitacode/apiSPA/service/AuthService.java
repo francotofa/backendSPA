@@ -31,6 +31,7 @@ public class AuthService {
         usuario.setEmail(dto.getEmail());
         usuario.setPassword(passwordEncoder.encode(dto.getPassword()));
         usuario.setDni(dto.getDni());
+        usuario.setTelefono(dto.getTelefono()); //faltaba este campo
         usuario.setActivo(true);
         usuario.setRol(dto.getRol() != null ? dto.getRol() : Rol.CLIENTE); 
 

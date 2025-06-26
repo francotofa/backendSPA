@@ -1,12 +1,14 @@
 import React from 'react';
 import styles from './ServiciosScreen.module.css';
 import { FaClock, FaCartPlus, FaCheck } from 'react-icons/fa';
+import { useCarrito } from '../Context/CarritoContext'; // Importa el contexto del carrito
 
 const ServicioCard = ({ servicio, esGrupal = false, reverse = false }) => {
   const [agregado, setAgregado] = React.useState(false);
+  const { agregarAlCarrito } = useCarrito(); // Usa el contexto del carrito
   
   const handleAgregar = () => {
-    // Aquí iría la lógica para agregar al carrito
+    agregarAlCarrito(servicio); // agregamos al carrito
     setAgregado(true);
     // Simulamos un timeout para que el botón vuelva a su estado original
     setTimeout(() => setAgregado(false), 2000);

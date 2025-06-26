@@ -10,6 +10,9 @@ import ServiciosScreen from './components/Servicios/ServiciosScreen';
 import ReservaPage from './pages/ReservaPage';
 import Profile from './components/Profile/Profile'; // Importa el componente Profile
 import './App.css';
+import PrivateRoute from './components/Auth/PrivateRoute'; // Importa el componente PrivateRoute
+
+import { CarritoProvider } from './components/Context/CarritoContext'; // Importa el contexto del carrito
 
 // Componente wrapper modificado para mostrar Header en todas las páginas
 function LayoutWrapper({ children }) {
@@ -23,9 +26,10 @@ function LayoutWrapper({ children }) {
 
 function App() {
   return (
-    <Router>
-      <div className="App">
-        <Routes>
+    <CarritoProvider>
+      <Router>
+        <div className="App">
+          <Routes>
           <Route path="/" element={
             <LayoutWrapper>
               <>
@@ -35,18 +39,25 @@ function App() {
               </>
             </LayoutWrapper>
           } />
-          
+
+          <Route path="/login" element={
+            <LayoutWrapper>
+              <AuthScreen />
+            </LayoutWrapper>
+          } />
+
           <Route path="/servicios" element={
             <LayoutWrapper>
               <ServiciosScreen />
             </LayoutWrapper>
           } />
 
-          {/* Cambiado de AuthScreen a Profile */}
-          <Route path="/perfil" element={
+            <Route path="/perfil" element={
+          <PrivateRoute>
             <LayoutWrapper>
               <Profile />
             </LayoutWrapper>
+          </PrivateRoute>
           } />
 
           <Route path="/registro" element={
@@ -56,14 +67,17 @@ function App() {
           } />
 
           <Route path="/reserva" element={
+          <PrivateRoute>
             <LayoutWrapper>
               <ReservaPage />
             </LayoutWrapper>
+          </PrivateRoute>
           } />
         </Routes>
-      </div>
-    </Router>
-  );
+        </div>
+      </Router>
+    </CarritoProvider>
+  ); 
 }
 
 export default App;

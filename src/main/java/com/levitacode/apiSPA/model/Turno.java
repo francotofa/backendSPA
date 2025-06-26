@@ -3,9 +3,15 @@ package com.levitacode.apiSPA.model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-
-
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Turno {
@@ -49,8 +55,8 @@ public class Turno {
 
     // Constructor con todos los campos
     public Turno(Integer id, Usuario cliente, Usuario profesional, Servicio servicio, EstadoTurno estado,
-         MetodoPago metodoPago, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin,
-         boolean pagado, boolean pagoWeb, double monto, String detalle) {
+        MetodoPago metodoPago, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin,
+        boolean pagado, boolean pagoWeb, double monto, String detalle) {
         this.id = id;
         this.cliente = cliente;
         this.profesional = profesional;
