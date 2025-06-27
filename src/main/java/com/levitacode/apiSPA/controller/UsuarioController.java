@@ -89,6 +89,10 @@ public ResponseEntity<?> obtenerPerfilUsuario(@PathVariable String email) {
         })
         .orElseThrow(() -> new RuntimeException("Usuario no encontrado con email: " + email));
 }
+@GetMapping("/clientes")
+public List<Usuario> obtenerClientes() {
+    return usuarioService.obtenerClientes(); // que filtre por rol CLIENTE
+}
 
 
 

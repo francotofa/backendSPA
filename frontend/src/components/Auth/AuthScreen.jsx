@@ -53,7 +53,7 @@ const AuthScreen = () => {
         localStorage.setItem('user', JSON.stringify(userData));
 
         alert('Inicio de sesión exitoso');
-        window.location.href = '/reserva';
+        window.location.href = '/perfil';
       } else {
         setErrorMessage('Credenciales inválidas. Por favor, intentá de nuevo.');
       }
