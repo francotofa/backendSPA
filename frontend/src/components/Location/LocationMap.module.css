@@ -1,0 +1,56 @@
+/* LocationMap.module.css */
+
+.mapContainer {
+  padding: 4rem 0;
+  background-color: #bbccd4;
+  text-align: center;
+}
+
+.mapTitle {
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+}
+
+.mapWrapper {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.mapIframe {
+  border-radius: 10px;
+}
+
+.locationInfo {
+  max-width: 800px;
+  margin: 2rem auto 0;
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.locationInfo p {
+  font-size: 1.1rem;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .mapTitle {
+    font-size: 2rem;
+  }
+  
+  .locationInfo {
+    padding: 1rem;
+  }
+  
+  .locationInfo p {
+    font-size: 1rem;
+  }
+}

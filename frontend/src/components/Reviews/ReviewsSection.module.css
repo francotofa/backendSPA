@@ -1,0 +1,80 @@
+/* ReviewsSection.module.css */
+
+.reviewsSection {
+  padding: 5rem 0;
+  background-color: #bbccd4;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  text-align: center;
+}
+
+.sectionTitle {
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.sectionSubtitle {
+  font-size: 1.1rem;
+  color: #7f8c8d;
+  margin-bottom: 3rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.reviewsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.reviewCard {
+  background: white;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.reviewCard:hover {
+  transform: translateY(-10px);
+}
+
+.reviewImage {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1.5rem;
+  border: 3px solid #3498db;
+}
+
+.reviewName {
+  font-size: 1.3rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.reviewComment {
+  font-size: 1rem;
+  color: #7f8c8d;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .sectionTitle {
+    font-size: 2rem;
+  }
+  
+  .reviewsGrid {
+    grid-template-columns: 1fr;
+  }
+}
