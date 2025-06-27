@@ -2,22 +2,14 @@ import React from 'react';
 import styles from './Header.module.css';
 import Carousel from './Carousel';
 import Navbar from '../Navbar/Navbar'; // Importamos el componente Navbar
-import logo from '../../assets/images/logo.png'; // Importa tu logo
 
 const Header = () => {
   return (
     <header className={styles.header}>
       <Carousel />
       
-     <div className={`${styles.menu} ${styles.container}`}>
-        {/* Reemplaza el texto con el logo */}
-        <a href="/" className={styles.logo}>
-          <img 
-            src={logo} 
-            alt="SPA Sentirse Bien - Logo" 
-            className={styles.logoImage}
-          />
-        </a>
+      <div className={`${styles.menu} ${styles.container}`}>
+        <a href="/" className={styles.logo}>SPA "Sentirse Bien"</a>
         <Navbar />
       </div>
 
