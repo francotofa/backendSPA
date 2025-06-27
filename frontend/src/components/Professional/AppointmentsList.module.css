@@ -1,0 +1,77 @@
+.appointmentsList {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.appointmentsList th, 
+.appointmentsList td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.appointmentsList th {
+    background-color: #5a6f80;
+    color: white;
+    font-weight: 600;
+}
+
+.appointmentsList tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.appointmentsList tr:hover {
+    background-color: #f0f0f0;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badgeConfirmed {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.badgePending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.badgeCancelled {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.printBtn {
+    background-color: transparent;
+    color: #5a6f80;
+    border: 1px solid #5a6f80;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.printBtn:hover {
+    background-color: #5a6f80;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .appointmentsList th, 
+    .appointmentsList td {
+        padding: 8px 10px;
+        font-size: 14px;
+    }
+    
+    .printBtn {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+}

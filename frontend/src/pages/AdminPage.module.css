@@ -1,0 +1,88 @@
+/* src/pages/AdminPage.module.css */
+
+.adminPage {
+    position: relative;
+    background-color: #f5f7fa;
+    min-height: 100vh;
+    padding-top: 0; /* Ajuste para el header fijo */
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    padding-bottom: 40px;
+}
+
+/* Ajustes para el footer */
+.adminPage footer {
+    background-color: #6F876F;
+    color: white;
+    padding: 2rem 0;
+    margin-top: 3rem;
+}
+
+.footerContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.footerSection {
+    flex: 1;
+    min-width: 200px;
+    margin-bottom: 1.5rem;
+    padding: 0 15px;
+}
+
+.footerSection h3 {
+    color: #ccc;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.footerSection p {
+    margin-bottom: 0.8rem;
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+.socialIcons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 1rem;
+}
+
+.socialIcons a {
+    color: white;
+    background-color: #5a6f80;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.socialIcons a:hover {
+    background-color: white;
+    color: #5a6f80;
+    transform: translateY(-3px);
+}
+
+@media (max-width: 768px) {
+    .footerSection {
+        flex: 100%;
+        text-align: center;
+    }
+    
+    .socialIcons {
+        justify-content: center;
+    }
+}

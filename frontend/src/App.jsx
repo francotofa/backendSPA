@@ -9,6 +9,9 @@ import RegistroScreen from './components/Auth/RegistroScreen';
 import ServiciosScreen from './components/Servicios/ServiciosScreen';
 import ReservaPage from './pages/ReservaPage';
 import Profile from './components/Profile/Profile'; // Importa el componente Profile
+import Footer from './components/Footer/Footer';
+import ProfessionalPage from './pages/ProfessionalPage';
+import AdminPage from './pages/AdminPage';
 import './App.css';
 import PrivateRoute from './components/Auth/PrivateRoute'; // Importa el componente PrivateRoute
 
@@ -36,6 +39,7 @@ function App() {
                 <Origen />
                 <Services />
                 <MissionVision />
+                <Footer />
               </>
             </LayoutWrapper>
           } />
@@ -73,6 +77,12 @@ function App() {
             </LayoutWrapper>
           </PrivateRoute>
           } />
+
+// En tu App.jsx, agrega esta nueva ruta junto a las demás
+<Route path="/professional" element={<ProfessionalPage />} />
+
+<Route path="/admin" element={<AdminPage />} />
+          
         </Routes>
         </div>
       </Router>

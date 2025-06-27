@@ -1,0 +1,105 @@
+.professionalPage {
+    background-color: #f5f7fa;
+    min-height: 100vh;
+    position: relative;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    padding-top: 4rem;
+}
+
+.welcomeSection {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.welcomeSection h2 {
+    color: #5a6f80;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.welcomeSection p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+/* Estilos para el modal */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.modalContent h3 {
+    color: #5a6f80;
+    margin-bottom: 1rem;
+}
+
+.modalContent p {
+    color: #666;
+    margin-bottom: 1.5rem;
+}
+
+.notesTextarea {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.modalButtons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.cancelButton {
+    background-color: #f8f9fa;
+    color: #495057;
+    border: 1px solid #ddd;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.cancelButton:hover {
+    background-color: #e9ecef;
+}
+
+.saveButton {
+    background-color: #5a6f80;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.saveButton:hover {
+    background-color: #3a4f60;
+}
