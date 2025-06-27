@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 
-    const PrivateRoute = ({ children }) => {
+const PrivateRoute = ({ children }) => {
     const token = localStorage.getItem('token');
 
     if (!token) {
@@ -12,5 +12,3 @@ import { Navigate } from 'react-router-dom';
     };
 
 export default PrivateRoute;
-//Este componente va a verificar si hay un token guardado. 
-// Si hay token, renderiza el componente que le pasás; si no hay token, te redirige a /login.        

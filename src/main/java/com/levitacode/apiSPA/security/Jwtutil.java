@@ -7,6 +7,7 @@ import javax.crypto.SecretKey;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -16,10 +17,12 @@ import io.jsonwebtoken.security.Keys;
 public class Jwtutil {
 
     private final String jwtSecretBase64 = "q3JkZWxsaWNhbnRlLXZlcnRlLWxhLXNlY3JldGEtMTIzNDU2Nzg5MGFiY2RlZmdoaWprbG1ub3BxcnN0dXZ3eHl6";
-
     private final SecretKey secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecretBase64));
+    private final long jwtExpirationMs = 86400000; // 24 horas
 
-    private final long jwtExpirationMs = 86400000; // 24h
+    private JwtParser parser() {
+        return Jwts.parserBuilder().setSigningKey(secretKey).build();
+    }
 
     public String generateJwtToken(String username, String role, String nombre, String apellido, String dni) {
         return Jwts.builder()
@@ -35,31 +38,27 @@ public class Jwtutil {
     }
 
     public String getUserNameFromJwtToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(secretKey)
-                .build()
+        return parser()
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
     }
 
     public String getRoleFromJwtToken(String token) {
-        return (String) Jwts.parserBuilder()
-                .setSigningKey(secretKey)
-                .build()
+        return parser()
                 .parseClaimsJws(token)
                 .getBody()
-                .get("role");
+                .get("role", String.class);
     }
 
     public boolean validateJwtToken(String authToken) {
         try {
-            Jwts.parserBuilder()
-                .setSigningKey(secretKey)
-                .build()
-                .parseClaimsJws(authToken);
+            parser().parseClaimsJws(authToken);
             return true;
-        } catch (JwtException | IllegalArgumentException e) {
+        } catch (JwtException e) {
+            System.err.println("❌ Token inválido: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.err.println("❌ Token vacío o mal formado");
         }
         return false;
     }
