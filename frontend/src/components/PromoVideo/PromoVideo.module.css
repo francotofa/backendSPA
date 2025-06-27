@@ -1,0 +1,72 @@
+/* PromoVideo.module.css */
+
+.videoSection {
+  padding: 5rem 0;
+  background-color: #f5f7fa;
+  text-align: center;
+}
+
+.videoContainer {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.videoTitle {
+  font-size: 2.3rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.videoSubtitle {
+  font-size: 1.2rem;
+  color: #5a6f80;
+  margin-bottom: 2rem;
+}
+
+.videoWrapper {
+  position: relative;
+  margin: 2rem auto;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  background-color: #000; /* Fondo negro mientras carga */
+}
+
+.videoElement {
+  width: 100%;
+  display: block;
+  outline: none;
+}
+
+.timeMarks {
+  display: flex;
+  justify-content: space-between;
+  max-width: 600px;
+  margin: 0.5rem auto;
+  color: #5a6f80;
+  font-size: 0.9rem;
+}
+
+.videoCaption {
+  font-size: 1.1rem;
+  color: #5a6f80;
+  max-width: 700px;
+  margin: 2rem auto 0;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .videoSection {
+    padding: 3rem 0;
+  }
+  
+  .videoTitle {
+    font-size: 1.8rem;
+  }
+  
+  .videoSubtitle {
+    font-size: 1rem;
+  }
+}
