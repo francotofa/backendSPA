@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Profile.module.css';
-import backgroundImage from '../../assets/images/photo-1544161515-4ab6ce6db874.jpg';
+
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ const Profile = () => {
     <div 
       className={styles.profilePage}
       style={{
-        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${backgroundImage})`
+        backgroundColor: '#bbccd4'
       }}
     >
       <div className={styles.profileContainer}>

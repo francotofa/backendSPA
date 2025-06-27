@@ -20,6 +20,9 @@ import { CarritoProvider } from './components/Context/CarritoContext';
 import PromoVideo from './components/PromoVideo/PromoVideo';
 import ReviewsSection from './components/Reviews/ReviewsSection';
 import Location from './components/Location/LocationMap';
+
+
+
 // Componente wrapper modificado para mostrar Header y Footer en todas las páginas
 function LayoutWrapper({ children }) {
   return (
@@ -34,6 +37,7 @@ function LayoutWrapper({ children }) {
 function App() {
   return (
     <CarritoProvider>
+
       <Router>
         <div className="App">
           <Routes>
@@ -104,6 +108,7 @@ function App() {
           </Routes>
         </div>
       </Router>
+  
     </CarritoProvider>
   ); 
 }
