@@ -2,11 +2,12 @@ package com.levitacode.apiSPA.Dto;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 public class TurnoDTO {
     private Integer clienteId;
     private Integer profesionalId;
-    private Integer servicioId;
+    private List<Integer> servicioIds;  // ⬅ NUEVO
     private LocalDate fecha;
     private LocalTime horaInicio;
     private LocalTime horaFin;
@@ -25,8 +26,8 @@ public class TurnoDTO {
     public Integer getProfesionalId() { return profesionalId; }
     public void setProfesionalId(Integer profesionalId) { this.profesionalId = profesionalId; }
 
-    public Integer getServicioId() { return servicioId; }
-    public void setServicioId(Integer servicioId) { this.servicioId = servicioId; }
+    public List<Integer> getServicioIds() { return servicioIds; }
+    public void setServicioIds(List<Integer> servicioIds) { this.servicioIds = servicioIds; }
 
     public LocalDate getFecha() { return fecha; }
     public void setFecha(LocalDate fecha) { this.fecha = fecha; }

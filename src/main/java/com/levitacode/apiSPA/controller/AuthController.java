@@ -30,20 +30,23 @@ public class AuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
-        @Data //clase interna para la respuesta del login
-        private static class JwtLoginResponse {
-            private final String token;
-            private final String nombre;
-            private final String apellido;
-            private final String email;
-            private final String telefono;
-            private final String dni;
-        }
+
     @Autowired
     private AuthService authService;
 
     @Autowired
     private Jwtutil jwtUtil;
+
+    @Data // Clase para la respuesta del login
+        private static class JwtLoginResponse {
+        private final String token;
+        private final Long id; // agregado
+        private final String nombre;
+        private final String apellido;
+        private final String email;
+        private final String telefono;
+        private final String dni;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO request) {
@@ -59,25 +62,26 @@ public class AuthController {
                     .map(grantedAuthority -> grantedAuthority.getAuthority().replace("ROLE_", ""))
                     .orElse("UNKNOWN");
 
-                Usuario usuario = authService.buscarPorEmail(request.getEmail())
+            Usuario usuario = authService.buscarPorEmail(request.getEmail())
                             .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-                    String jwt = jwtUtil.generateJwtToken(
-                        request.getEmail(),
-                        role,
-                        usuario.getNombre(),
-                        usuario.getApellido(),
-                        usuario.getDni()
-                    );
-
-            return ResponseEntity.ok(new JwtLoginResponse( // respuesta del login
-                jwt,
+            String jwt = jwtUtil.generateJwtToken(
+                request.getEmail(),
+                role,
                 usuario.getNombre(),
                 usuario.getApellido(),
-                usuario.getEmail(),
-                usuario.getTelefono(),
                 usuario.getDni()
-            ));
+            );
+
+        return ResponseEntity.ok(new JwtLoginResponse(
+            jwt,
+            usuario.getId(),  // <-- agregá esto
+            usuario.getNombre(),
+            usuario.getApellido(),
+            usuario.getEmail(),
+            usuario.getTelefono(),
+            usuario.getDni()
+        ));
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
         }
@@ -110,35 +114,34 @@ public class AuthController {
 
     // Endpoint para obtener el perfil del usuario autenticado
     @GetMapping("/me")
-public ResponseEntity<?> obtenerPerfil(@RequestHeader("Authorization") String authHeader) {
-    try {
-        String token = authHeader.replace("Bearer ", "");
-        if (!jwtUtil.validateJwtToken(token)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido");
+    public ResponseEntity<?> obtenerPerfil(@RequestHeader("Authorization") String authHeader) {
+        try {
+            String token = authHeader.replace("Bearer ", "");
+            if (!jwtUtil.validateJwtToken(token)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido");
+            }
+
+            String email = jwtUtil.getUserNameFromJwtToken(token);
+            Usuario usuario = authService.buscarPorEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+            String role = jwtUtil.getRoleFromJwtToken(token);
+
+            PerfilDTO perfil = new PerfilDTO(
+                usuario.getEmail(),
+                usuario.getNombre(),
+                usuario.getApellido(),
+                usuario.getDni(),
+                usuario.getTelefono(),
+                role
+            );
+
+            return ResponseEntity.ok(perfil);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error en token o usuario");
         }
-
-        String email = jwtUtil.getUserNameFromJwtToken(token);
-        Usuario usuario = authService.buscarPorEmail(email)
-            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        // Obtener rol
-        String role = jwtUtil.getRoleFromJwtToken(token); // Deberías implementar este método
-
-        // Crear un DTO con datos que querés enviar (usuario + rol)
-        PerfilDTO perfil = new PerfilDTO(
-            usuario.getEmail(),
-            usuario.getNombre(),
-            usuario.getApellido(),
-            usuario.getDni(),
-            usuario.getTelefono(),
-            role
-        );
-        // Podés devolver solo lo que quieras exponer
-        return ResponseEntity.ok(usuario);
-    } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error en token o usuario");
-    }
-}    @Data
-    private static class JwtResponse {
-        private final String token;
     }
 }
+// Este controlador maneja la autenticación y registro de usuarios.
+// Permite iniciar sesión, registrarse y verificar el token JWT.
+// Utiliza AuthService para la lógica de negocio y Jwtutil para manejar los tokens JWT.

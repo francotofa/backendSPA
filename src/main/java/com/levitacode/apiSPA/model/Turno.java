@@ -2,6 +2,7 @@ package com.levitacode.apiSPA.model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,6 +12,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 
 @Entity
@@ -28,9 +31,14 @@ public class Turno {
     @JoinColumn(name = "profesional_id")
     private Usuario profesional;
 
-    @ManyToOne
-    @JoinColumn(name = "servicio_id")
-    private Servicio servicio;
+    // CAMBIO: de ManyToOne a ManyToMany
+    @ManyToMany
+    @JoinTable(
+        name = "turno_servicio",
+        joinColumns = @JoinColumn(name = "turno_id"),
+        inverseJoinColumns = @JoinColumn(name = "servicio_id")
+    )
+    private List<Servicio> servicios;
 
     @Enumerated(EnumType.STRING)
     private EstadoTurno estado;
@@ -49,30 +57,13 @@ public class Turno {
     @Column(length = 500)
     private String detalle;
 
-    // Constructor vacío
     public Turno() {
     }
 
-    // Constructor con todos los campos
-    public Turno(Integer id, Usuario cliente, Usuario profesional, Servicio servicio, EstadoTurno estado,
-        MetodoPago metodoPago, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin,
-        boolean pagado, boolean pagoWeb, double monto, String detalle) {
-        this.id = id;
-        this.cliente = cliente;
-        this.profesional = profesional;
-        this.servicio = servicio;
-        this.estado = estado;
-        this.metodoPago = metodoPago;
-        this.fecha = fecha;
-        this.horaInicio = horaInicio;
-        this.horaFin = horaFin;
-        this.pagado = pagado;
-        this.pagoWeb = pagoWeb;
-        this.monto = monto;
-        this.detalle = detalle;
-    }
+    // Constructor completo (puede generarse con tu IDE si lo necesitás)
 
-    // Getters y setters (solo pongo algunos, podés generar todos en tu IDE)
+    // Getters y Setters
+
     public Integer getId() {
         return id;
     }
@@ -97,20 +88,20 @@ public class Turno {
         this.profesional = profesional;
     }
 
-    public Servicio getServicio() {
-        return servicio;
+    public List<Servicio> getServicios() {
+        return servicios;
     }
 
-    public void setServicio(Servicio servicio) {
-        this.servicio = servicio;
+    public void setServicios(List<Servicio> servicios) {
+        this.servicios = servicios;
     }
 
     public EstadoTurno getEstado() {
         return estado;
     }
 
-    public void setEstado(com.levitacode.apiSPA.model.EstadoTurno estado2) {
-        this.estado = estado2;
+    public void setEstado(EstadoTurno estado) {
+        this.estado = estado;
     }
 
     public MetodoPago getMetodoPago() {

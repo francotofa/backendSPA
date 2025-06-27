@@ -20,7 +20,7 @@ import com.levitacode.apiSPA.service.UsuarioService;  // IMPORT DTO
 
 @RestController
 @RequestMapping("/api/usuarios")
-@CrossOrigin("*")
+//@CrossOrigin("*")
 public class UsuarioController {
 
     @Autowired
@@ -55,6 +55,12 @@ public class UsuarioController {
         return usuarioService.obtenerUsuarioPorId(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + id));
     }
+
+    @GetMapping("/empleados")
+    public ResponseEntity<List<Usuario>> obtenerEmpleados() {
+        List<Usuario> empleados = usuarioService.obtenerUsuariosPorRol("EMPLEADO");
+        return ResponseEntity.ok(empleados);
+}
 
     @PutMapping("/{id}")
     public Usuario actualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuario) {

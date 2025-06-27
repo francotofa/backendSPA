@@ -2,6 +2,7 @@ package com.levitacode.apiSPA.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,8 +30,7 @@ public class TurnoService {
     @Autowired
     private ServicioRepository servicioRepository;
 
-        public List<Turno> obtenerPorFecha(String fecha) {
-        // Convierte el string a LocalDate y consulta los turnos de ese día
+    public List<Turno> obtenerPorFecha(String fecha) {
         LocalDate fechaConsulta = LocalDate.parse(fecha);
         return turnoRepository.findByFecha(fechaConsulta);
     }
@@ -48,52 +48,60 @@ public class TurnoService {
         return turnoRepository.save(turno);
     }
 
-    public Turno crearDesdeDTO(TurnoDTO dto) {
-    Turno turno = new Turno();
-
-    // Setear fecha y hora
-    turno.setFecha(dto.getFecha());
-    turno.setHoraInicio(dto.getHoraInicio());
-    turno.setHoraFin(dto.getHoraFin());
-
-    // Buscar cliente y setear
-    Usuario cliente = usuarioRepository.findById(dto.getClienteId().longValue())
-            .orElseThrow(() -> new RuntimeException("Cliente no encontrado con ID: " + dto.getClienteId()));
-    turno.setCliente(cliente);
-
-    // Buscar profesional y setear
-    Usuario profesional = usuarioRepository.findById(dto.getProfesionalId().longValue())
-            .orElseThrow(() -> new RuntimeException("Profesional no encontrado con ID: " + dto.getProfesionalId()));
-    turno.setProfesional(profesional);
-
-    // Buscar servicio y setear
-    Servicio servicio = servicioRepository.findById(dto.getServicioId().longValue())
-            .orElseThrow(() -> new RuntimeException("Servicio no encontrado con ID: " + dto.getServicioId()));
-    turno.setServicio(servicio);
-
-    // Convertir Strings a enums
+public Turno crearDesdeDTO(TurnoDTO dto) {
     try {
-        EstadoTurno estado = EstadoTurno.valueOf(dto.getEstado());
+        Turno turno = new Turno();
+
+        // Fecha y hora
+        turno.setFecha(dto.getFecha());
+        turno.setHoraInicio(dto.getHoraInicio());
+
+        // Cliente
+        Usuario cliente = usuarioRepository.findById(dto.getClienteId().longValue())
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado con ID: " + dto.getClienteId()));
+        turno.setCliente(cliente);
+
+        // Profesional
+        Usuario profesional = usuarioRepository.findById(dto.getProfesionalId().longValue())
+                .orElseThrow(() -> new RuntimeException("Profesional no encontrado con ID: " + dto.getProfesionalId()));
+        turno.setProfesional(profesional);
+
+        // Servicios
+        List<Servicio> servicios = dto.getServicioIds().stream()
+                .map(id -> servicioRepository.findById(id.longValue())
+                        .orElseThrow(() -> new RuntimeException("Servicio no encontrado con ID: " + id)))
+                .collect(Collectors.toList());
+        turno.setServicios(servicios);
+
+        // Calcular hora fin
+        int totalMinutos = servicios.size() * 60;
+        turno.setHoraFin(dto.getHoraInicio().plusMinutes(totalMinutos));
+
+        // Enums (con manejo de mayúsculas)
+        EstadoTurno estado = EstadoTurno.valueOf(dto.getEstado().toUpperCase());
+        MetodoPago metodoPago = MetodoPago.valueOf(dto.getMetodoPago().toUpperCase());
+
         turno.setEstado(estado);
-    } catch (IllegalArgumentException e) {
-        throw new RuntimeException("Estado inválido: " + dto.getEstado());
-    }
-
-    try {
-        MetodoPago metodoPago = MetodoPago.valueOf(dto.getMetodoPago());
         turno.setMetodoPago(metodoPago);
-    } catch (IllegalArgumentException e) {
-        throw new RuntimeException("Método de pago inválido: " + dto.getMetodoPago());
+
+        // Otros campos
+        turno.setPagado(dto.isPagado());
+        turno.setPagoWeb(dto.isPagoWeb());
+        turno.setMonto(dto.getMonto());
+
+        // Detalle
+        String detalle = servicios.stream()
+                .map(Servicio::getNombre)
+                .collect(Collectors.joining(", "));
+        turno.setDetalle(detalle);
+
+        return turnoRepository.save(turno);
+
+    } catch (Exception e) {
+        throw new RuntimeException("Error al crear turno: " + e.getMessage(), e);
     }
-
-    // Otros campos
-    turno.setPagado(dto.isPagado());
-    turno.setPagoWeb(dto.isPagoWeb());
-    turno.setMonto(dto.getMonto());
-    turno.setDetalle(dto.getDetalle());
-
-    return turnoRepository.save(turno);
 }
+
 
     public Turno actualizar(Long id, Turno turnoActualizado) {
         Turno existente = obtenerPorId(id);
@@ -101,7 +109,7 @@ public class TurnoService {
         existente.setHoraInicio(turnoActualizado.getHoraInicio());
         existente.setHoraFin(turnoActualizado.getHoraFin());
         existente.setEstado(turnoActualizado.getEstado());
-        existente.setServicio(turnoActualizado.getServicio());
+        existente.setServicios(turnoActualizado.getServicios());
         existente.setCliente(turnoActualizado.getCliente());
         existente.setProfesional(turnoActualizado.getProfesional());
         existente.setMetodoPago(turnoActualizado.getMetodoPago());

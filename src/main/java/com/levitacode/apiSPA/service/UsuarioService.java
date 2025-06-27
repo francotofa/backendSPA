@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.levitacode.apiSPA.exceptions.EmailAlreadyExistsException;
+import com.levitacode.apiSPA.model.Rol;
 import com.levitacode.apiSPA.model.Usuario;
 import com.levitacode.apiSPA.repository.UsuarioRepository;
 
@@ -29,6 +30,11 @@ public class UsuarioService {
     public List<Usuario> listarUsuarios() {
         return usuarioRepository.findAll();
     }
+    // Obtener usuarios por rol
+    public List<Usuario> obtenerUsuariosPorRol(String rol) {
+    return usuarioRepository.findByRol(Rol.valueOf(rol.toUpperCase()));
+}
+
 
     // Buscar por ID
     public Optional<Usuario> obtenerUsuarioPorId(Long id) {

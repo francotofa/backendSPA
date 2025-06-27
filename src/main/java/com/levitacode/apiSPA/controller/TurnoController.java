@@ -3,7 +3,7 @@ package com.levitacode.apiSPA.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +19,7 @@ import com.levitacode.apiSPA.service.TurnoService;
 
 @RestController
 @RequestMapping("/api/turnos")
-@CrossOrigin("*")
+//@CrossOrigin("*")
 public class TurnoController {
 
     @Autowired
@@ -40,11 +40,18 @@ public class TurnoController {
         return turnoService.obtenerPorFecha(fecha);
     }
 
-    @PostMapping
-public Turno crearTurno(@RequestBody TurnoDTO turnoDTO) {
-    return turnoService.
-    crearDesdeDTO(turnoDTO);
+@PostMapping
+    public ResponseEntity<?> crearTurno(@RequestBody TurnoDTO turnoDTO) {
+        try {
+            Turno turno = turnoService.crearDesdeDTO(turnoDTO);
+            return ResponseEntity.ok(turno);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body("Error al crear turno: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error interno: " + e.getMessage());
+        }
 }
+
 
     @PutMapping("/{id}")
     public Turno actualizarTurno(@PathVariable Long id, @RequestBody Turno turno) {

@@ -27,7 +27,6 @@ const AuthScreen = () => {
       console.log('Respuesta completa:', response);
       console.log('Datos recibidos:', response.data);
 
-      // Validar token: que exista, sea string y tenga longitud razonable
       if (
         response.status === 200 &&
         response.data.token &&
@@ -36,6 +35,7 @@ const AuthScreen = () => {
       ) {
         const {
           token,
+          id,
           nombre,
           apellido,
           email: userEmail,
@@ -44,10 +44,16 @@ const AuthScreen = () => {
         } = response.data;
 
         localStorage.setItem('token', token);
-        localStorage.setItem('userName', `${nombre} ${apellido}`);
-        localStorage.setItem('userEmail', userEmail);
-        localStorage.setItem('userPhone', telefono);
-        localStorage.setItem('userDni', dni);
+
+        const userData = {
+          id,
+          nombre: `${nombre} ${apellido}`,
+          email: userEmail,
+          telefono,
+          dni
+        };
+
+        localStorage.setItem('user', JSON.stringify(userData));
 
         alert('Inicio de sesión exitoso');
         window.location.href = '/reserva';
