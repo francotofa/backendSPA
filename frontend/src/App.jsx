@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header';
 import Origen from './components/Origen/Origen';
 import Services from './components/Services/Services';
@@ -8,21 +8,25 @@ import AuthScreen from './components/Auth/AuthScreen';
 import RegistroScreen from './components/Auth/RegistroScreen';
 import ServiciosScreen from './components/Servicios/ServiciosScreen';
 import ReservaPage from './pages/ReservaPage';
-import Profile from './components/Profile/Profile'; // Importa el componente Profile
+import Profile from './components/Profile/Profile';
 import Footer from './components/Footer/Footer';
 import ProfessionalPage from './pages/ProfessionalPage';
 import AdminPage from './pages/AdminPage';
 import './App.css';
-import PrivateRoute from './components/Auth/PrivateRoute'; // Importa el componente PrivateRoute
+import PrivateRoute from './components/Auth/PrivateRoute';
+import RecuperarScreen from './components/Auth/RecuperarScreen';
+import { CarritoProvider } from './components/Context/CarritoContext';
 
-import { CarritoProvider } from './components/Context/CarritoContext'; // Importa el contexto del carrito
-
-// Componente wrapper modificado para mostrar Header en todas las páginas
+import PromoVideo from './components/PromoVideo/PromoVideo';
+import ReviewsSection from './components/Reviews/ReviewsSection';
+import Location from './components/Location/LocationMap';
+// Componente wrapper modificado para mostrar Header y Footer en todas las páginas
 function LayoutWrapper({ children }) {
   return (
     <>
-      <Header /> {/* Header siempre visible */}
+      <Header />
       {children}
+      <Footer /> {/* Footer siempre visible */}
     </>
   );
 }
@@ -33,57 +37,71 @@ function App() {
       <Router>
         <div className="App">
           <Routes>
-          <Route path="/" element={
-            <LayoutWrapper>
-              <>
-                <Origen />
-                <Services />
-                <MissionVision />
-                <Footer />
-              </>
-            </LayoutWrapper>
-          } />
+            <Route path="/" element={
+              <LayoutWrapper>
+                <>
+                  <Origen />
+                  <Services />
+                  <MissionVision />
+                  <PromoVideo /> 
+                  <ReviewsSection />
+                  <Location /> 
+                </>
+              </LayoutWrapper>
+            } />
+            
+            <Route path="/recuperar" element={
+              <LayoutWrapper>
+                <RecuperarScreen />
+              </LayoutWrapper>
+            } />
+            
+            <Route path="/login" element={
+              <LayoutWrapper>
+                <AuthScreen />
+              </LayoutWrapper>
+            } />
 
-          <Route path="/login" element={
-            <LayoutWrapper>
-              <AuthScreen />
-            </LayoutWrapper>
-          } />
-
-          <Route path="/servicios" element={
-            <LayoutWrapper>
-              <ServiciosScreen />
-            </LayoutWrapper>
-          } />
+            <Route path="/servicios" element={
+              <LayoutWrapper>
+                <ServiciosScreen />
+              </LayoutWrapper>
+            } />
 
             <Route path="/perfil" element={
-          <PrivateRoute>
-            <LayoutWrapper>
-              <Profile />
-            </LayoutWrapper>
-          </PrivateRoute>
-          } />
+              <PrivateRoute>
+                <LayoutWrapper>
+                  <Profile />
+                </LayoutWrapper>
+              </PrivateRoute>
+            } />
 
-          <Route path="/registro" element={
-            <LayoutWrapper>
-              <RegistroScreen />
-            </LayoutWrapper>
-          } />
+            <Route path="/registro" element={
+              <LayoutWrapper>
+                <RegistroScreen />
+              </LayoutWrapper>
+            } />
 
-          <Route path="/reserva" element={
-          <PrivateRoute>
-            <LayoutWrapper>
-              <ReservaPage />
-            </LayoutWrapper>
-          </PrivateRoute>
-          } />
+            <Route path="/reserva" element={
+              <PrivateRoute>
+                <LayoutWrapper>
+                  <ReservaPage />
+                </LayoutWrapper>
+              </PrivateRoute>
+            } />
 
-// En tu App.jsx, agrega esta nueva ruta junto a las demás
-<Route path="/professional" element={<ProfessionalPage />} />
+            <Route path="/professional" element={
+              <LayoutWrapper>
+                <ProfessionalPage />
+              </LayoutWrapper>
+            } />
 
-<Route path="/admin" element={<AdminPage />} />
-          
-        </Routes>
+            <Route path="/admin" element={
+              <LayoutWrapper>
+                <AdminPage />
+              </LayoutWrapper>
+            } />
+          </Routes>
         </div>
       </Router>
     </CarritoProvider>

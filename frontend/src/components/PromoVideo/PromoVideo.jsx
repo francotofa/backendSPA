@@ -63,11 +63,7 @@ const PromoVideo = () => {
           </video>
         </div>
 
-        <div className={styles.timeMarks}>
-          <span>0:00</span>
-          <span>1:00</span>
-        </div>
-        
+  
         <p className={styles.videoCaption}>
           Un breve recorrido por nuestras instalaciones y los servicios que ofrecemos para tu bienestar
         </p>

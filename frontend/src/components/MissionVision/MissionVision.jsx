@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './MissionVision.module.css';
 import hidromasajesImage from '../../assets/images/hidromasajes.jpg'; // Asegúrate de tener esta imagen
-import yogaImage from '../../assets/images/yoga.avif'; // Asegúrate de tener esta imagen
+import yogaImage from '../../assets/images/yoganazi.jpg'; // Asegúrate de tener esta imagen
 
 const MissionVision = () => {
   return (

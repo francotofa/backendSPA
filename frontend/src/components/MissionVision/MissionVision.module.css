@@ -1,34 +1,38 @@
 .general {
     display: flex;
-    min-height: 500px; /* Ajusta según necesites */
+    min-height: 50vh; /* Ocupa exactamente la mitad de la pantalla */
+    height: 50vh; /* Altura fija a la mitad del viewport */
 }
 
 .general1 {
     width: 50%;
-    padding: 100px;
+    padding: 2rem; /* Reduje el padding para mejor ajuste */
     background-color: #bbccd4;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    overflow: auto; /* Para contenido que exceda */
 }
 
 .general1 h2 {
-    font-size: 55px;
-    line-height: 70px;
+    font-size: 2.5rem;
+    line-height: 1.2;
     color: #323337;
     text-transform: uppercase;
-    margin-bottom: 20px;
+    margin-bottom: 1rem;
 }
 
 .general1 p {
-    font-size: 16px;
+    font-size: 1rem;
     color: #414247;
-    margin: 15px 0;
+    margin: 0.8rem 0;
+    line-height: 1.5;
 }
 
 .general2, .general3 {
     width: 50%;
-    background-position: center center;
+    height: 100%; /* Ocupa toda la altura del contenedor */
+    background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -37,26 +41,27 @@
 @media (max-width: 768px) {
     .general {
         flex-direction: column;
+        height: auto;
+        min-height: auto;
     }
 
     .general1, .general2, .general3 {
         width: 100%;
-        padding: 50px 20px;
+        height: 50vh; /* Cada sección ocupa media pantalla en móvil */
+        padding: 1.5rem;
     }
 
     .general1 h2 {
-        font-size: 40px;
-        line-height: 50px;
+        font-size: 2rem;
     }
 }
 
 @media (max-width: 480px) {
     .general1 {
-        padding: 50px 15px;
+        padding: 1rem;
     }
 
     .general1 h2 {
-        font-size: 32px;
-        line-height: 40px;
+        font-size: 1.8rem;
     }
 }

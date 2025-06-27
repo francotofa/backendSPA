@@ -19,8 +19,8 @@ const LocationMap = () => {
         ></iframe>
       </div>
       <div className={styles.locationInfo}>
-        <p><strong>Dirección:</strong> Av. Siempreviva 742, Resistencia, Chaco</p>
-        <p><strong>Horario:</strong> Lunes a Viernes: 9:00 - 20:00 | Sábados: 10:00 - 18:00</p>
+        <p><strong>Dirección:</strong> C. French 414, Resistencia, Chaco</p>
+        <p><strong>Horario:</strong> Lunes a Sabados: 9:00 - 17:00 </p>
       </div>
     </div>
   );

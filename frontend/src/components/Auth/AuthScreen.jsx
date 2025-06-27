@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Header from '../Header/Header';
-import Carousel from '../Header/Carousel';
 import styles from './AuthScreen.module.css';
 import axios from 'axios';
 
@@ -41,7 +40,7 @@ const AuthScreen = () => {
         } = response.data;
 
         localStorage.setItem('token', token);
-        localStorage.setItem('userRol', rol); // 👈 GUARDAMOS EL ROL
+        localStorage.setItem('userRol', rol);
 
         const userData = {
           id,
@@ -70,7 +69,7 @@ const AuthScreen = () => {
 
   return (
     <div className={styles.authContainer}>
-      <Carousel />
+      <div className={styles.authBackground}></div>
 
       <div className={styles.authFormContainer}>
         <div className={styles.authForm}>

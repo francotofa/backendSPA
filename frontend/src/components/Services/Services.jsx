@@ -9,19 +9,19 @@ const Services = () => {
         <h2>Servicios Individuales</h2>
         <div className={styles.servicesGroup}>
           <div className={styles.services1}>
-            <img src="/images/iconMasaje1.png" alt="Icono de masajes" />
+            <img src="/images/iconMasaje1_blanco.png" alt="Icono de masajes" />
             <h3>Masajes</h3>
           </div>
           <div className={styles.services1}>
-            <img src="/images/iconBelleza2.png" alt="Icono de belleza" />
+            <img src="/images/iconBelleza2_blanco.png" alt="Icono de belleza" />
             <h3>Belleza</h3>
           </div>
           <div className={styles.services1}>
-            <img src="/images/iconTratamientoFacial3.png" alt="Icono de tratamientos faciales" />
+            <img src="/images/iconTratamientoFacial3_blanco.png" alt="Icono de tratamientos faciales" />
             <h3>Tratamientos Faciales</h3>
           </div>
           <div className={styles.services1}>
-            <img src="/images/iconTratamientoCorporal4.png" alt="Icono de tratamientos corporales" />
+            <img src="/images/iconTratamientoCorporal4_blanco.png" alt="Icono de tratamientos corporales" />
             <h3>Tratamientos Corporales</h3>
           </div>
         </div>
