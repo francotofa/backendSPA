@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from 'react';
-
+import React, { useState } from 'react';
 import axios from 'axios';
-
 import ProfessionalHeader from '../components/Professional/ProfessionalHeader';
 import AppointmentsCard from '../components/Professional/AppointmentsCard';
 import ClientHistoryModal from '../components/Professional/ClientHistoryModal';
@@ -11,10 +9,11 @@ import styles from './ProfessionalPage.module.css';
 const ProfessionalPage = () => {
   const [professionalName, setProfessionalName] = useState("Profesional 1");
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [selectedSessionAppointment, setSelectedSessionAppointment] = useState(null);
   const [sessionNotes, setSessionNotes] = useState('');
   const [showHistoryModal, setShowHistoryModal] = useState(false);
-  
+  const [selectedHistoryAppointment, setSelectedHistoryAppointment] = useState(null);
+
   const getTomorrowDate = () => {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -28,70 +27,54 @@ const ProfessionalPage = () => {
   };
 
   const handleSaveSession = () => {
-    // Aquí iría la lógica para guardar en tu backend
     console.log('Notas guardadas:', {
-      appointmentId: selectedAppointment.id,
+      appointmentId: selectedSessionAppointment.id,
       notes: sessionNotes
     });
-    
-    // Limpiar el estado
-    setSelectedAppointment(null);
+    setSelectedSessionAppointment(null);
     setSessionNotes('');
   };
 
   const handleViewHistory = (appointment) => {
-    setSelectedAppointment(appointment);
+    setSelectedHistoryAppointment(appointment);
     setShowHistoryModal(true);
   };
 
-
-  // Funciones para manejar acciones de los turnos 
-  // ACA ESTABAN LOS PROBLEMAS
-  // Cancelar, confirmar y completar sesión
-
   const handleCancelSession = async (appointment) => {
-  try {
-    await axios.delete(`http://localhost:8080/api/turnos/${appointment.id}`);
-    alert("Turno cancelado correctamente");
-    // Opcional: recargar lista o actualizar estado local
-  } catch (error) {
-    console.error('Error al cancelar turno:', error);
-    alert('No se pudo cancelar el turno');
-  }
-};
-const handleConfirmSession = async (appointment) => {
-  try {
-    await axios.put(`http://localhost:8080/api/turnos/turnos/${appointment.id}/confirmar`);
-    alert("Turno confirmado correctamente");
-    // Si querés actualizar el estado localmente, hacelo acá si manejás appointments
-  } catch (error) {
-    console.error('Error al confirmar turno:', error);
-    alert('No se pudo confirmar el turno');
-  }
-};
-const handleCompleteSession = async (appointment) => {
-  try {
-    await axios.put(`http://localhost:8080/api/turnos/turnos/${appointment.id}/finalizar`);
-    alert("Turno finalizado correctamente");
-    // Acá también podés actualizar estado local si querés reflejarlo sin recargar
-  } catch (error) {
-    console.error('Error al finalizar turno:', error);
-    alert('No se pudo finalizar el turno');
-  }
-};
+    try {
+      await axios.delete(`http://localhost:8080/api/turnos/${appointment.id}`);
+      alert("Turno cancelado correctamente");
+    } catch (error) {
+      console.error('Error al cancelar turno:', error);
+      alert('No se pudo cancelar el turno');
+    }
+  };
 
+  const handleConfirmSession = async (appointment) => {
+    try {
+      await axios.put(`http://localhost:8080/api/turnos/turnos/${appointment.id}/confirmar`);
+      alert("Turno confirmado correctamente");
+    } catch (error) {
+      console.error('Error al confirmar turno:', error);
+      alert('No se pudo confirmar el turno');
+    }
+  };
+
+  const handleCompleteSession = async (appointment) => {
+    setSelectedSessionAppointment(appointment); // → esto activa el modal "Registrar sesión"
+  };
 
   return (
     <div className={styles.professionalPage}>
       <ProfessionalHeader professionalName={professionalName} />
-      
+
       <div className={styles.container}>
         <div className={styles.welcomeSection}>
           <h2>Mis Turnos Asignados</h2>
           <p>Consulta y gestiona tus turnos asignados</p>
         </div>
 
-        <AppointmentsCard 
+        <AppointmentsCard
           title="Turnos del Día Siguiente"
           date={getTomorrowDate()}
           showNavigation={false}
@@ -100,31 +83,27 @@ const handleCompleteSession = async (appointment) => {
           onViewHistory={handleViewHistory}
         />
 
-
-   {/* onCancelSession={handleCancelSession} */}
-  {/* onConfirmSession={handleConfirmSession} AGREGADOS */}
-      <AppointmentsCard 
-        title="Turnos por Día"
-        date={currentDate}
-        showNavigation={true}
-        onDateChange={handleDateChange}
-        showPrint={true}
-        showActions={true}
-        onConfirmSession={handleConfirmSession}
-        onCompleteSession={handleCompleteSession}
-        onCancelSession={handleCancelSession}
-        onViewHistory={handleViewHistory}
-      />
-
+        <AppointmentsCard
+          title="Turnos por Día"
+          date={currentDate}
+          showNavigation={true}
+          onDateChange={handleDateChange}
+          showPrint={true}
+          showActions={true}
+          onConfirmSession={handleConfirmSession}
+          onCompleteSession={handleCompleteSession}
+          onCancelSession={handleCancelSession}
+          onViewHistory={handleViewHistory}
+        />
       </div>
 
       {/* Modal para completar sesión */}
-      {selectedAppointment && (
+      {selectedSessionAppointment && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
-            <h3>Registrar sesión con {selectedAppointment.client}</h3>
-            <p>Servicio: {selectedAppointment.service}</p>
-            
+            <h3>Registrar sesión con {selectedSessionAppointment.cliente?.nombre}</h3>
+            <p>Servicio: {selectedSessionAppointment.detalle}</p>
+
             <textarea
               className={styles.notesTextarea}
               value={sessionNotes}
@@ -132,15 +111,15 @@ const handleCompleteSession = async (appointment) => {
               placeholder="Describe lo realizado en la sesión..."
               rows={5}
             />
-            
+
             <div className={styles.modalButtons}>
-              <button 
+              <button
                 className={styles.cancelButton}
-                onClick={() => setSelectedAppointment(null)}
+                onClick={() => setSelectedSessionAppointment(null)}
               >
                 Cancelar
               </button>
-              <button 
+              <button
                 className={styles.saveButton}
                 onClick={handleSaveSession}
               >
@@ -152,13 +131,15 @@ const handleCompleteSession = async (appointment) => {
       )}
 
       {/* Modal para ver historial */}
-      {showHistoryModal && selectedAppointment && (
+      {showHistoryModal && selectedHistoryAppointment && (
         <ClientHistoryModal
-          client={selectedAppointment.client}
-          onClose={() => setShowHistoryModal(false)}
+          client={selectedHistoryAppointment.cliente?.nombre}
+          onClose={() => {
+            setShowHistoryModal(false);
+            setSelectedHistoryAppointment(null);
+          }}
         />
       )}
-      
     </div>
   );
 };

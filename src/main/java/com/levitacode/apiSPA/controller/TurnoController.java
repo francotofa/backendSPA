@@ -103,6 +103,10 @@ public ResponseEntity<?> finalizarTurno(@PathVariable Long id) {
 public List<Turno> obtenerTurnosPorProfesionalYFecha(@PathVariable Long id, @PathVariable String fecha) {
     return turnoService.obtenerPorProfesionalYFecha(id, fecha);
 }
-
+    @GetMapping("/cliente/{clienteId}/historial")
+    public ResponseEntity<List<Turno>> obtenerHistorialPorCliente(@PathVariable Long clienteId) {
+        List<Turno> historial = turnoService.obtenerHistorialPorCliente(clienteId);
+        return ResponseEntity.ok(historial);
+    }
 
 }
