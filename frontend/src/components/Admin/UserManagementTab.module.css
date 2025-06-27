@@ -1,0 +1,111 @@
+.userManagement {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.usersTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.usersTable th,
+.usersTable td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.usersTable th {
+  background-color: #5a6f80;
+  color: white;
+  font-weight: 600;
+}
+
+.usersTable tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.usersTable tr:hover {
+  background-color: #f0f0f0;
+}
+
+.status {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.status.active {
+  background-color: #e6ffed;
+  color: #2ea44f;
+}
+
+.status.inactive {
+  background-color: #ffeef0;
+  color: #cb2431;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.deactivateBtn,
+.activateBtn,
+.deleteBtn {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.deactivateBtn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.deactivateBtn:hover {
+  background-color: #c82333;
+}
+
+.activateBtn {
+  background-color: #28a745;
+  color: white;
+}
+
+.activateBtn:hover {
+  background-color: #218838;
+}
+
+.deleteBtn {
+  background-color: #6c757d;
+  color: white;
+}
+
+.deleteBtn:hover {
+  background-color: #5a6268;
+}
+
+@media (max-width: 768px) {
+  .usersTable {
+    display: block;
+    overflow-x: auto;
+  }
+  
+  .actions {
+    flex-direction: column;
+  }
+  
+  .deactivateBtn,
+  .activateBtn,
+  .deleteBtn {
+    width: 100%;
+  }
+}
