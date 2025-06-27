@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import styles from './AdminTabs.module.css';
 
 const ServicesTab = () => {
-  // Estados para el formulario y listado
   const [services, setServices] = useState([]);
   const [formData, setFormData] = useState({
     id: null,
@@ -10,12 +9,10 @@ const ServicesTab = () => {
     category: '',
     duration: '',
     price: '',
-    professional: '',
     description: ''
   });
   const [isEditing, setIsEditing] = useState(false);
 
-  // Categorías disponibles
   const categories = [
     { value: 'masajes', label: 'Masajes' },
     { value: 'belleza', label: 'Belleza' },
@@ -24,74 +21,75 @@ const ServicesTab = () => {
     { value: 'grupales', label: 'Servicios Grupales' }
   ];
 
-  // Profesionales disponibles
-  const professionals = [
-    'Profesional 1',
-    'Profesional 2',
-    'Profesional 3',
-    'Profesional 4'
-  ];
-
-  // Cargar datos iniciales (en una app real sería una API)
   useEffect(() => {
     const mockServices = [
       {
         id: 1,
-        name: "Masaje relajante",
+        name: "Masajes",
         category: "masajes",
         duration: 60,
-        price: 5000,
-        professional: "Profesional 1",
-        description: "Alivia la tensión y promueve la relajación profunda"
+        price: 4500,
+        description: "Anti-stress, Descontracturantes, Piedras calientes, Circulatorios"
       },
       {
         id: 2,
-        name: "Facial rejuvenecedor",
+        name: "Belleza",
+        category: "belleza",
+        duration: 60,
+        price: 3800,
+        description: "Lifting de pestaña, Depilación facial, Belleza de manos y pies"
+      },
+      {
+        id: 3,
+        name: "Tratamientos Faciales",
         category: "faciales",
-        duration: 45,
-        price: 4000,
-        professional: "Profesional 2",
-        description: "Tratamiento facial para rejuvenecer la piel"
+        duration: 60,
+        price: 5200,
+        description: "Punta de Diamante, Limpieza + Hidratación, Crio frecuencia facial"
+      },
+      {
+        id: 4,
+        name: "Tratamientos Corporales",
+        category: "corporales",
+        duration: 60,
+        price: 6800,
+        description: "VelaSlim, DermoHealth, Criofrecuencia, Ultracavitación"
+      },
+      {
+        id: 5,
+        name: "Hidromasajes",
+        category: "grupales",
+        duration: 60,
+        price: 8500,
+        description: "Sesiones grupales, Aromaterapia opcional, Hasta 8 personas"
+      },
+      {
+        id: 6,
+        name: "Yoga Grupal",
+        category: "grupales",
+        duration: 60,
+        price: 7200,
+        description: "Vinyasa & Hatha, Máx. 10 personas, Incluye materiales"
       }
     ];
     setServices(mockServices);
   }, []);
 
-  // Manejar cambios en el formulario
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  // Validar formulario
   const validateForm = () => {
-    if (!formData.name.trim()) {
-      alert('El nombre del servicio es requerido');
-      return false;
-    }
-    if (!formData.category) {
-      alert('La categoría es requerida');
-      return false;
-    }
-    if (!formData.duration || isNaN(formData.duration)) {
-      alert('Duración inválida');
-      return false;
-    }
-    if (!formData.price || isNaN(formData.price)) {
-      alert('Precio inválido');
-      return false;
-    }
-    if (!formData.professional) {
-      alert('Profesional es requerido');
-      return false;
-    }
+    if (!formData.name.trim()) return alert('El nombre del servicio es requerido');
+    if (!formData.category) return alert('La categoría es requerida');
+    if (!formData.duration || isNaN(formData.duration)) return alert('Duración inválida');
+    if (!formData.price || isNaN(formData.price)) return alert('Precio inválido');
     return true;
   };
 
-  // Enviar formulario (crear o actualizar)
   const handleSubmit = (e) => {
     e.preventDefault();
-    
     if (!validateForm()) return;
 
     const serviceData = {
@@ -101,21 +99,15 @@ const ServicesTab = () => {
     };
 
     if (isEditing) {
-      // Actualizar servicio existente
-      setServices(services.map(svc => 
-        svc.id === formData.id ? serviceData : svc
-      ));
+      setServices(services.map(svc => svc.id === formData.id ? serviceData : svc));
     } else {
-      // Crear nuevo servicio
       const newId = services.length > 0 ? Math.max(...services.map(s => s.id)) + 1 : 1;
       setServices([...services, { ...serviceData, id: newId }]);
     }
 
-    // Resetear formulario
     resetForm();
   };
 
-  // Editar servicio
   const handleEdit = (service) => {
     setFormData({
       id: service.id,
@@ -123,24 +115,19 @@ const ServicesTab = () => {
       category: service.category,
       duration: service.duration.toString(),
       price: service.price.toString(),
-      professional: service.professional,
       description: service.description
     });
     setIsEditing(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Eliminar servicio
   const handleDelete = (id) => {
     if (window.confirm('¿Estás seguro de eliminar este servicio?')) {
       setServices(services.filter(svc => svc.id !== id));
-      if (isEditing && formData.id === id) {
-        resetForm();
-      }
+      if (isEditing && formData.id === id) resetForm();
     }
   };
 
-  // Resetear formulario
   const resetForm = () => {
     setFormData({
       id: null,
@@ -148,13 +135,11 @@ const ServicesTab = () => {
       category: '',
       duration: '',
       price: '',
-      professional: '',
       description: ''
     });
     setIsEditing(false);
   };
 
-  // Formatear precio
   const formatPrice = (price) => {
     return new Intl.NumberFormat('es-AR', {
       style: 'currency',
@@ -226,23 +211,6 @@ const ServicesTab = () => {
                 required
               />
             </div>
-            <div className={styles.formGroup}>
-              <label htmlFor="service-professional">Profesional Asignado</label>
-              <select
-                id="service-professional"
-                name="professional"
-                value={formData.professional}
-                onChange={handleInputChange}
-                required
-              >
-                <option value="">Seleccionar profesional</option>
-                {professionals.map(prof => (
-                  <option key={prof} value={prof}>
-                    {prof}
-                  </option>
-                ))}
-              </select>
-            </div>
           </div>
 
           <div className={styles.formGroup}>
@@ -261,8 +229,8 @@ const ServicesTab = () => {
               {isEditing ? 'Actualizar Servicio' : 'Guardar Servicio'}
             </button>
             {isEditing && (
-              <button 
-                type="button" 
+              <button
+                type="button"
                 onClick={resetForm}
                 className={`${styles.btn} ${styles.btnSecondary}`}
               >
@@ -285,7 +253,6 @@ const ServicesTab = () => {
                 <th>Categoría</th>
                 <th>Duración</th>
                 <th>Precio</th>
-                <th>Profesional</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -298,15 +265,14 @@ const ServicesTab = () => {
                     <td>{category?.label || service.category}</td>
                     <td>{service.duration} min</td>
                     <td>{formatPrice(service.price)}</td>
-                    <td>{service.professional}</td>
                     <td>
-                      <button 
+                      <button
                         onClick={() => handleEdit(service)}
                         className={styles.actionBtn}
                       >
                         <i className="fas fa-edit"></i> Editar
                       </button>
-                      <button 
+                      <button
                         onClick={() => handleDelete(service.id)}
                         className={`${styles.actionBtn} ${styles.dangerBtn}`}
                       >
