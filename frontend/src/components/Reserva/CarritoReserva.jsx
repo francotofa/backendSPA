@@ -1,34 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styles from './CarritoReserva.module.css';
 import { FaShoppingCart, FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { useCarrito } from '../Context/CarritoContext'; // Asegurate que el path esté bien
 
 const CarritoReserva = () => {
-  const [cart, setCart] = useState([]);
+  const { carrito, removerDelCarrito } = useCarrito();
 
-  useEffect(() => {
-    // Cargar carrito desde localStorage
-    const loadCart = () => {
-      try {
-        const cartData = localStorage.getItem('carrito');
-        if (cartData) {
-          setCart(JSON.parse(cartData));
-        }
-      } catch (e) {
-        console.error('Error al cargar carrito:', e);
-      }
-    };
-    loadCart();
-  }, []);
+  const total = carrito.reduce((acc, item) => acc + item.precio, 0).toLocaleString();
 
-  const removeItem = (index) => {
-    const newCart = [...cart];
-    newCart.splice(index, 1);
-    setCart(newCart);
-    localStorage.setItem('carrito', JSON.stringify(newCart));
-  };
-
-  if (cart.length === 0) {
+  if (carrito.length === 0) {
     return (
       <div className={styles.cartItems}>
         <h2>Servicios Seleccionados</h2>
@@ -47,23 +28,23 @@ const CarritoReserva = () => {
     <div className={styles.cartItems}>
       <h2>Servicios Seleccionados</h2>
       <div className={styles.cartItemsList}>
-        {cart.map((item, index) => (
+        {carrito.map((item, index) => (
           <div key={index} className={styles.cartItem}>
             <div className={styles.itemInfo}>
               <h3>{item.nombre}</h3>
               <p>{item.duracion}</p>
             </div>
-            <div className={styles.itemPrice}>
-              ${item.precio}
-            </div>
-            <div 
-              className={styles.removeItem} 
-              onClick={() => removeItem(index)}
-            >
+            <div className={styles.itemPrice}>${item.precio}</div>
+            <div className={styles.removeItem} onClick={() => removerDelCarrito(index)}>
               <FaTrash />
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Total */}
+      <div className={styles.cartTotal}>
+        <h3>Total: ${total}</h3>
       </div>
     </div>
   );

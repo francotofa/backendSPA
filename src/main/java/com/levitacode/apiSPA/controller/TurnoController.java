@@ -35,6 +35,11 @@ public class TurnoController {
         return turnoService.obtenerPorId(id);
     }
 
+        @GetMapping("/fecha/{fecha}")
+    public List<Turno> obtenerTurnosPorFecha(@PathVariable String fecha) {
+        return turnoService.obtenerPorFecha(fecha);
+    }
+
     @PostMapping
 public Turno crearTurno(@RequestBody TurnoDTO turnoDTO) {
     return turnoService.

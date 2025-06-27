@@ -30,7 +30,15 @@ public class AuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
-
+        @Data //clase interna para la respuesta del login
+        private static class JwtLoginResponse {
+            private final String token;
+            private final String nombre;
+            private final String apellido;
+            private final String email;
+            private final String telefono;
+            private final String dni;
+        }
     @Autowired
     private AuthService authService;
 
@@ -62,7 +70,14 @@ public class AuthController {
                         usuario.getDni()
                     );
 
-            return ResponseEntity.ok(new JwtResponse(jwt));
+            return ResponseEntity.ok(new JwtLoginResponse( // respuesta del login
+                jwt,
+                usuario.getNombre(),
+                usuario.getApellido(),
+                usuario.getEmail(),
+                usuario.getTelefono(),
+                usuario.getDni()
+            ));
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
         }
@@ -117,18 +132,12 @@ public ResponseEntity<?> obtenerPerfil(@RequestHeader("Authorization") String au
             usuario.getTelefono(),
             role
         );
-
-
-
-
         // Podés devolver solo lo que quieras exponer
         return ResponseEntity.ok(usuario);
     } catch (Exception e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error en token o usuario");
     }
-}
-
-    @Data
+}    @Data
     private static class JwtResponse {
         private final String token;
     }

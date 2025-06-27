@@ -1,5 +1,6 @@
 package com.levitacode.apiSPA.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +10,12 @@ import com.levitacode.apiSPA.Dto.TurnoDTO;
 import com.levitacode.apiSPA.exceptions.TurnoNotFoundException;
 import com.levitacode.apiSPA.model.EstadoTurno;
 import com.levitacode.apiSPA.model.MetodoPago;
+import com.levitacode.apiSPA.model.Servicio;
 import com.levitacode.apiSPA.model.Turno;
 import com.levitacode.apiSPA.model.Usuario;
-import com.levitacode.apiSPA.model.Servicio;
+import com.levitacode.apiSPA.repository.ServicioRepository;
 import com.levitacode.apiSPA.repository.TurnoRepository;
 import com.levitacode.apiSPA.repository.UsuarioRepository;
-import com.levitacode.apiSPA.repository.ServicioRepository;
 
 @Service
 public class TurnoService {
@@ -27,6 +28,12 @@ public class TurnoService {
 
     @Autowired
     private ServicioRepository servicioRepository;
+
+        public List<Turno> obtenerPorFecha(String fecha) {
+        // Convierte el string a LocalDate y consulta los turnos de ese día
+        LocalDate fechaConsulta = LocalDate.parse(fecha);
+        return turnoRepository.findByFecha(fechaConsulta);
+    }
 
     public List<Turno> obtenerTodos() {
         return turnoRepository.findAll();
