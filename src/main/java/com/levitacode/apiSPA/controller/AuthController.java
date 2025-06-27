@@ -46,6 +46,7 @@ public class AuthController {
         private final String email;
         private final String telefono;
         private final String dni;
+        private final String rol; // <-- agregá esto si querés enviar el rol
     }
 
     @PostMapping("/login")
@@ -75,12 +76,13 @@ public class AuthController {
 
         return ResponseEntity.ok(new JwtLoginResponse(
             jwt,
-            usuario.getId(),  // <-- agregá esto
+            usuario.getId(),
             usuario.getNombre(),
             usuario.getApellido(),
             usuario.getEmail(),
             usuario.getTelefono(),
-            usuario.getDni()
+            usuario.getDni(),
+            role // 👈 AGREGALO ACÁ
         ));
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");

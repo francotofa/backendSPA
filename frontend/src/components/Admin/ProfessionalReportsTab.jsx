@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import styles from './AdminTabs.module.css';
 
 const ProfessionalReportsTab = () => {
-  const [appointments, setAppointments] = useState([]);
   const [professionals, setProfessionals] = useState([]);
   const [reportData, setReportData] = useState(null);
   const [filters, setFilters] = useState({
@@ -11,26 +11,23 @@ const ProfessionalReportsTab = () => {
     professional: ''
   });
 
-  // Datos mock - en una app real vendrían de una API
   useEffect(() => {
-    const mockProfessionals = [
-      'Dra. Ana Felicidad',
-      'Dr. Carlos Bienestar',
-      'Lic. María Relajación',
-      'Téc. Juan Armonía'
-    ];
+    const fetchProfessionals = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const res = await axios.get('http://localhost:8080/api/usuarios/empleados', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
 
-    const mockAppointments = [
-      { id: 1, professional: "Dra. Ana Felicidad", date: new Date().toISOString().split('T')[0], status: "confirmed", payment: 5000 },
-      { id: 2, professional: "Dr. Carlos Bienestar", date: new Date().toISOString().split('T')[0], status: "confirmed", payment: 4000 },
-      { id: 3, professional: "Dra. Ana Felicidad", date: new Date(new Date().setDate(new Date().getDate() - 1)).toISOString().split('T')[0], status: "confirmed", payment: 5000 },
-      { id: 4, professional: "Lic. María Relajación", date: new Date().toISOString().split('T')[0], status: "confirmed", payment: 3500 },
-      { id: 5, professional: "Téc. Juan Armonía", date: new Date(new Date().setDate(new Date().getDate() - 2)).toISOString().split('T')[0], status: "confirmed", payment: 4500 },
-      { id: 6, professional: "Dra. Ana Felicidad", date: new Date().toISOString().split('T')[0], status: "confirmed", payment: 3000 }
-    ];
+        setProfessionals(res.data); // Esperamos array de objetos con id, nombre, apellido
+      } catch (err) {
+        console.error('Error al obtener profesionales:', err);
+      }
+    };
 
-    setProfessionals(mockProfessionals);
-    setAppointments(mockAppointments);
+    fetchProfessionals();
   }, []);
 
   const handleFilterChange = (e) => {
@@ -38,38 +35,30 @@ const ProfessionalReportsTab = () => {
     setFilters(prev => ({ ...prev, [name]: value }));
   };
 
-  const generateReport = () => {
+  const generateReport = async () => {
     if (!filters.startDate || !filters.endDate) {
       alert('Por favor seleccione ambas fechas');
       return;
     }
 
-    // Filtrar turnos confirmados en el rango de fechas
-    let filteredAppointments = appointments.filter(
-      app => app.status === 'confirmed' && 
-            app.date >= filters.startDate && 
-            app.date <= filters.endDate
-    );
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:8080/api/reportes/profesional', {
+        params: {
+          id: filters.professional, // suponiendo que el backend espera el id del profesional
+          startDate: filters.startDate,
+          endDate: filters.endDate
+        },
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
 
-    // Filtrar por profesional si se seleccionó uno
-    if (filters.professional) {
-      filteredAppointments = filteredAppointments.filter(
-        app => app.professional === filters.professional
-      );
+      setReportData(response.data);
+    } catch (err) {
+      console.error('Error al obtener el reporte del backend:', err);
+      alert('Error al generar el reporte. Revisa la consola.');
     }
-
-    // Agrupar por profesional
-    const report = {};
-    filteredAppointments.forEach(app => {
-      if (!report[app.professional]) {
-        report[app.professional] = { count: 0, total: 0 };
-      }
-      
-      report[app.professional].count++;
-      report[app.professional].total += app.payment;
-    });
-
-    setReportData(report);
   };
 
   const formatCurrency = (amount) => {
@@ -114,8 +103,8 @@ const ProfessionalReportsTab = () => {
           >
             <option value="">Todos los profesionales</option>
             {professionals.map(prof => (
-              <option key={prof} value={prof}>
-                {prof}
+              <option key={prof.id} value={prof.id}>
+                {prof.nombre} {prof.apellido}
               </option>
             ))}
           </select>
@@ -134,7 +123,7 @@ const ProfessionalReportsTab = () => {
             <h4>Reporte del {filters.startDate} al {filters.endDate}</h4>
             {filters.professional && (
               <p className={styles.filterInfo}>
-                Mostrando solo: <strong>{filters.professional}</strong>
+                Mostrando solo: <strong>{professionals.find(p => p.id.toString() === filters.professional)?.nombre} {professionals.find(p => p.id.toString() === filters.professional)?.apellido}</strong>
               </p>
             )}
             

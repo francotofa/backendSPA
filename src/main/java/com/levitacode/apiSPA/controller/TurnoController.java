@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.levitacode.apiSPA.Dto.TurnoDTO;
+import com.levitacode.apiSPA.model.EstadoTurno;
 import com.levitacode.apiSPA.model.Turno;
 import com.levitacode.apiSPA.service.TurnoService;
 
@@ -35,12 +37,27 @@ public class TurnoController {
         return turnoService.obtenerPorId(id);
     }
 
-        @GetMapping("/fecha/{fecha}")
+    @GetMapping("/fecha/{fecha}")
     public List<Turno> obtenerTurnosPorFecha(@PathVariable String fecha) {
         return turnoService.obtenerPorFecha(fecha);
     }
 
-@PostMapping
+    // Nuevo endpoint para filtrar turnos por fechas, profesional y estado
+    @GetMapping("/reportes")
+    public ResponseEntity<List<Turno>> obtenerTurnosFiltrados(
+            @RequestParam String startDate,
+            @RequestParam String endDate,
+            @RequestParam(required = false) Long profesionalId,
+            @RequestParam(required = false) String estado) {
+        try {
+            List<Turno> turnos = turnoService.obtenerTurnosFiltrados(startDate, endDate, profesionalId, estado);
+            return ResponseEntity.ok(turnos);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping
     public ResponseEntity<?> crearTurno(@RequestBody TurnoDTO turnoDTO) {
         try {
             Turno turno = turnoService.crearDesdeDTO(turnoDTO);
@@ -50,8 +67,7 @@ public class TurnoController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error interno: " + e.getMessage());
         }
-}
-
+    }
 
     @PutMapping("/{id}")
     public Turno actualizarTurno(@PathVariable Long id, @RequestBody Turno turno) {
@@ -62,4 +78,31 @@ public class TurnoController {
     public void eliminarTurno(@PathVariable Long id) {
         turnoService.eliminar(id);
     }
+    // Obtener los turnos del día siguiente para un profesional
+@GetMapping("/profesional/{id}/turnos")
+public List<TurnoDTO> getTurnosDelProfesional(@PathVariable Long id) {
+    return turnoService.obtenerTurnosPorProfesional(id);
+}
+
+// Confirmar un turno
+@PutMapping("/turnos/{id}/confirmar")
+public ResponseEntity<?> confirmarTurno(@PathVariable Long id) {
+    turnoService.cambiarEstadoTurno(id, EstadoTurno.CONFIRMADO);
+    return ResponseEntity.ok().build();
+}
+
+// Finalizar un turno
+@PutMapping("/turnos/{id}/finalizar")
+public ResponseEntity<?> finalizarTurno(@PathVariable Long id) {
+    turnoService.cambiarEstadoTurno(id, EstadoTurno.FINALIZADO);
+    return ResponseEntity.ok().build();
+}
+
+// Obtener turnos por profesional y fecha
+@GetMapping("/profesional/{id}/fecha/{fecha}")
+public List<Turno> obtenerTurnosPorProfesionalYFecha(@PathVariable Long id, @PathVariable String fecha) {
+    return turnoService.obtenerPorProfesionalYFecha(id, fecha);
+}
+
+
 }

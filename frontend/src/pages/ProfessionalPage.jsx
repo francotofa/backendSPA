@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+
+import axios from 'axios';
+
 import ProfessionalHeader from '../components/Professional/ProfessionalHeader';
 import AppointmentsCard from '../components/Professional/AppointmentsCard';
 import ClientHistoryModal from '../components/Professional/ClientHistoryModal';
@@ -24,11 +27,6 @@ const ProfessionalPage = () => {
     setCurrentDate(newDate);
   };
 
-  const handleCompleteSession = (appointment) => {
-    setSelectedAppointment(appointment);
-    setSessionNotes('');
-  };
-
   const handleSaveSession = () => {
     // Aquí iría la lógica para guardar en tu backend
     console.log('Notas guardadas:', {
@@ -45,6 +43,43 @@ const ProfessionalPage = () => {
     setSelectedAppointment(appointment);
     setShowHistoryModal(true);
   };
+
+
+  // Funciones para manejar acciones de los turnos 
+  // ACA ESTABAN LOS PROBLEMAS
+  // Cancelar, confirmar y completar sesión
+
+  const handleCancelSession = async (appointment) => {
+  try {
+    await axios.delete(`http://localhost:8080/api/turnos/${appointment.id}`);
+    alert("Turno cancelado correctamente");
+    // Opcional: recargar lista o actualizar estado local
+  } catch (error) {
+    console.error('Error al cancelar turno:', error);
+    alert('No se pudo cancelar el turno');
+  }
+};
+const handleConfirmSession = async (appointment) => {
+  try {
+    await axios.put(`http://localhost:8080/api/turnos/turnos/${appointment.id}/confirmar`);
+    alert("Turno confirmado correctamente");
+    // Si querés actualizar el estado localmente, hacelo acá si manejás appointments
+  } catch (error) {
+    console.error('Error al confirmar turno:', error);
+    alert('No se pudo confirmar el turno');
+  }
+};
+const handleCompleteSession = async (appointment) => {
+  try {
+    await axios.put(`http://localhost:8080/api/turnos/turnos/${appointment.id}/finalizar`);
+    alert("Turno finalizado correctamente");
+    // Acá también podés actualizar estado local si querés reflejarlo sin recargar
+  } catch (error) {
+    console.error('Error al finalizar turno:', error);
+    alert('No se pudo finalizar el turno');
+  }
+};
+
 
   return (
     <div className={styles.professionalPage}>
@@ -65,16 +100,22 @@ const ProfessionalPage = () => {
           onViewHistory={handleViewHistory}
         />
 
-        <AppointmentsCard 
-          title="Turnos por Día"
-          date={currentDate}
-          showNavigation={true}
-          onDateChange={handleDateChange}
-          showPrint={true}
-          showActions={true}
-          onCompleteSession={handleCompleteSession}
-          onViewHistory={handleViewHistory}
-        />
+
+   {/* onCancelSession={handleCancelSession} */}
+  {/* onConfirmSession={handleConfirmSession} AGREGADOS */}
+      <AppointmentsCard 
+        title="Turnos por Día"
+        date={currentDate}
+        showNavigation={true}
+        onDateChange={handleDateChange}
+        showPrint={true}
+        showActions={true}
+        onConfirmSession={handleConfirmSession}
+        onCompleteSession={handleCompleteSession}
+        onCancelSession={handleCancelSession}
+        onViewHistory={handleViewHistory}
+      />
+
       </div>
 
       {/* Modal para completar sesión */}

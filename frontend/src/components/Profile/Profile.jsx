@@ -7,6 +7,8 @@ const Profile = () => {
   const navigate = useNavigate();
 
   const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const rol = localStorage.getItem('userRol'); // Podría ser 'ADMIN', 'EMPLEADO' o 'CLIENTE'
+
   const nombre = user.nombre || 'No disponible';
   const email = user.email || 'No disponible';
   const dni = user.dni || 'No disponible';
@@ -17,10 +19,17 @@ const Profile = () => {
     navigate('/login');
   };
 
+  const handleGoToPanel = () => {
+    if (rol === 'ADMIN') navigate('/admin');
+    if (rol === 'EMPLEADO') navigate('/empleado');
+  };
+
   return (
     <div 
       className={styles.profilePage}
-      style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${backgroundImage})` }}
+      style={{
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${backgroundImage})`
+      }}
     >
       <div className={styles.profileContainer}>
         <div className={styles.profileBox}>
@@ -29,6 +38,16 @@ const Profile = () => {
           <p><strong>Email:</strong> <span>{email}</span></p>
           <p><strong>DNI:</strong> <span>{dni}</span></p>
           <p><strong>Teléfono:</strong> <span>{telefono}</span></p>
+
+          {/* Mostrar solo si el rol es ADMIN o EMPLEADO */}
+          {rol === 'ADMIN' || rol === 'EMPLEADO' ? (
+            <button 
+              onClick={handleGoToPanel} 
+              className={`${styles.submitBtn} ${styles.goPanelBtn}`}
+            >
+              Ir al Panel de {rol}
+            </button>
+          ) : null}
 
           <button 
             onClick={handleLogout} 

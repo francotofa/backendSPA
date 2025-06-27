@@ -11,31 +11,37 @@ import com.levitacode.apiSPA.model.Turno;
 
 @Repository
 public interface TurnoRepository extends JpaRepository<Turno, Long> {
-    // Los métodos CRUD básicos ya vienen incluidos con JpaRepository
-    // (save, findById, findAll, delete, etc.)
-
-    // Puedes agregar métodos personalizados según tus necesidades
-    // Por ejemplo, para buscar turnos por profesional y fecha:
+    
+    // Buscar turnos por profesional y fecha exacta
     List<Turno> findByProfesionalIdAndFecha(Integer profesionalId, LocalDate fecha);
-    
-    // O para buscar turnos por estado:
+
+    // Buscar turnos por estado
     List<Turno> findByEstado(EstadoTurno estado);
-    
-    // O para buscar turnos por profesional y estado:
+
+    // Buscar turnos por profesional y estado
     List<Turno> findByProfesionalIdAndEstado(Integer profesionalId, EstadoTurno estado);
-    
-    // O para buscar turnos por profesional:
+
+    // Buscar todos los turnos de un profesional
     List<Turno> findByProfesionalId(Integer profesionalId);
-    
-    // O para buscar turnos por cliente:
+
+    // Buscar todos los turnos de un cliente
     List<Turno> findByClienteId(Integer clienteId);
-    
-    // O para buscar turnos por cliente ordenados por fecha descendente:
+
+    // Buscar turnos de un cliente ordenados por fecha descendente
     List<Turno> findByClienteIdOrderByFechaDesc(Long clienteId);
-    
-    // O para buscar turnos por profesional y cliente:
+
+    // Buscar turnos por profesional y cliente
     List<Turno> findByProfesionalIdAndClienteId(Integer profesionalId, Integer clienteId);
 
-    List<Turno> findByFecha(LocalDate fecha); // Método para buscar turnos por fecha
+    // Buscar turnos por fecha exacta
+    List<Turno> findByFecha(LocalDate fecha);
+
+    // Buscar turnos por fecha entre dos fechas (para reportes)
+    List<Turno> findByFechaBetween(LocalDate start, LocalDate end);
+
+    // Buscar turnos de un profesional entre dos fechas (para reportes)
+    List<Turno> findByProfesionalIdAndFechaBetween(Long profesionalId, LocalDate start, LocalDate end);
+    
+    List<Turno> findByProfesionalIdAndFecha(Long profesionalId, LocalDate fecha);
 
 }

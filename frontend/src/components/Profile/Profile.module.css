@@ -12,6 +12,11 @@
   flex-grow: 1;
   padding: 20px;
 }
+.panelBtn {
+  background-color: #4caf50;
+  color: white;
+  margin-bottom: 1rem;
+}
 
 .formBox, .profileBox {
   background-color: rgba(255, 255, 255, 0.9);

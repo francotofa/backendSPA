@@ -12,7 +12,6 @@ const AuthScreen = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validación básica en frontend
     if (!email.includes('@') || password.length < 4) {
       setErrorMessage('Por favor ingresá un correo válido y una contraseña mayor a 3 caracteres.');
       return;
@@ -23,9 +22,6 @@ const AuthScreen = () => {
         email,
         password
       });
-
-      console.log('Respuesta completa:', response);
-      console.log('Datos recibidos:', response.data);
 
       if (
         response.status === 200 &&
@@ -40,10 +36,12 @@ const AuthScreen = () => {
           apellido,
           email: userEmail,
           telefono,
-          dni
+          dni,
+          rol
         } = response.data;
 
         localStorage.setItem('token', token);
+        localStorage.setItem('userRol', rol); // 👈 GUARDAMOS EL ROL
 
         const userData = {
           id,
