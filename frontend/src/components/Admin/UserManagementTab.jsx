@@ -2,22 +2,26 @@ import React, { useState } from 'react';
 import styles from './UserManagementTab.module.css';
 
 const UserManagementTab = () => {
-  // Datos de ejemplo
+  // Datos de usuarios reales
   const [users, setUsers] = useState([
-    { id: 1, name: 'Admin Principal', email: 'admin@spa.com', role: 'admin', active: true },
-    { id: 2, name: 'Dra. Ana Felicidad', email: 'ana@spa.com', role: 'professional', active: true },
-    { id: 3, name: 'Cliente Ejemplo', email: 'cliente@spa.com', role: 'client', active: false },
-    { id: 4, name: 'Dr. Carlos Bienestar', email: 'carlos@spa.com', role: 'professional', active: true }
+    { id: 14, name: 'Dra Ana', email: 'AnaSpa@example.com', role: 'admin', active: true },
+    { id: 11, name: 'Martín Pérez', email: 'martin.perez@example.com', role: 'professional', active: true },
+    { id: 12, name: 'Silvia Gómez', email: 'silvia.gomez@example.com', role: 'professional', active: true },
+    { id: 13, name: 'Lucia Asselborn', email: 'lucia.a@example.com', role: 'professional', active: true },
+    { id: 4, name: 'Lucho Frias', email: 'lfk@example.com', role: 'client', active: false },
+    { id: 10, name: 'Juan Jesus', email: 'jesus@example.com', role: 'client', active: true },
+    { id: 14, name: 'Ramiro Ramirez', email: 'ramiroRR@example.com', role: 'client', active: true },
+    { id: 14, name: 'Gabriel Klein', email: 'ayrton@hotmail.com', role: 'client', active: true },
+    { id: 15, name: 'Franco Gonzales', email: 'francoG@example.com', role: 'client', active: true }
+    
   ]);
 
-  // Cambiar estado activo/inactivo
   const toggleUserStatus = (userId) => {
     setUsers(users.map(user => 
       user.id === userId ? { ...user, active: !user.active } : user
     ));
   };
 
-  // Eliminar usuario con confirmación
   const handleDeleteUser = (userId) => {
     if (window.confirm('¿Está seguro que desea eliminar este usuario permanentemente?')) {
       setUsers(users.filter(user => user.id !== userId));
@@ -27,7 +31,7 @@ const UserManagementTab = () => {
   return (
     <div className={styles.userManagement}>
       <h2>Gestión de Usuarios</h2>
-      
+
       <table className={styles.usersTable}>
         <thead>
           <tr>

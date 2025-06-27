@@ -21,7 +21,7 @@ const Profile = () => {
 
   const handleGoToPanel = () => {
     if (rol === 'ADMIN') navigate('/admin');
-    if (rol === 'EMPLEADO') navigate('/empleado');
+    if (rol === 'EMPLEADO') navigate('/professional');
   };
 
   return (

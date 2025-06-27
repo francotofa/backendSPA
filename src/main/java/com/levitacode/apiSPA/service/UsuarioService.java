@@ -70,4 +70,8 @@ public class UsuarioService {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'existeUsuarioConEmail'");
     }
+    public List<Usuario> obtenerClientes() {
+    return usuarioRepository.findByRol(Rol.CLIENTE);
+}
+
 }
