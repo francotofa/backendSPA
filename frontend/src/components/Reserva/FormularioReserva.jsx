@@ -5,10 +5,25 @@ import MetodoPago from './MetodoPago';
 import { useCarrito } from '../Context/CarritoContext';
 import { useUser } from '../Context/UserContext';
 import axios from 'axios';
+import jsPDF from 'jspdf';
 
 const FormularioReserva = () => {
   const { user } = useUser();
   const { carrito: cart } = useCarrito();
+
+    const [cardData, setCardData] = useState({
+    numero: '',
+    nombre: '',
+    fecha: '',
+    cvv: ''
+  });
+
+  const handleCardDataChange = (field, value) => {
+    setCardData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
 
   const [formData, setFormData] = useState({
     date: '',
@@ -127,16 +142,80 @@ useEffect(() => {
       e.target.setCustomValidity('');
     }
   };
+const generarPDFReserva = () => {
+  const doc = new jsPDF();
+  const total = cart.reduce((sum, s) => sum + s.precio, 0);
 
-  // Enviar reserva
-const handleSubmit = async (e) => {
+  const nombreCliente = user?.nombre || formData.name || '(Sin nombre)';
+  const emailCliente = user?.email || formData.email || '(Sin email)';
+  const telefonoCliente = user?.telefono || formData.phone || '(Sin teléfono)';
+
+  const profesional = empleados.find(e => e.id === parseInt(formData.empleadoId));
+  const nombreProfesional = profesional ? `${profesional.nombre} ${profesional.apellido}` : `ID: ${formData.empleadoId}`;
+
+  // Título
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(18);
+  doc.text("Confirmación de Reserva", 20, 25);
+
+  // Línea separadora
+  doc.setDrawColor(0);
+  doc.line(20, 30, 190, 30);
+
+  // Datos del turno
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(12);
+  let y = 45;
+  const espacio = 10;
+
+  doc.text(`Nombre: ${nombreCliente}`, 20, y); y += espacio;
+  doc.text(`Email: ${emailCliente}`, 20, y); y += espacio;
+  doc.text(`Teléfono: ${telefonoCliente}`, 20, y); y += espacio;
+  doc.text(`Fecha: ${formData.date}`, 20, y); y += espacio;
+  doc.text(`Hora: ${formData.time}`, 20, y); y += espacio;
+  doc.text(`Profesional: ${nombreProfesional}`, 20, y); y += espacio;
+  doc.text(`Servicios: ${cart.map(s => s.nombre).join(', ')}`, 20, y); y += espacio;
+  doc.text(`Total: $${total}`, 20, y); y += espacio;
+
+  // Método de pago
+  const metodoPagoTexto =
+    formData.paymentMethod === 'now'
+      ? 'Pagar ahora (Tarjeta de crédito)'
+      : 'Pagar en el spa (Efectivo)';
+  doc.text(`Método de Pago: ${metodoPagoTexto}`, 20, y); y += espacio;
+
+  // Mostrar datos de tarjeta si eligió "now"
+  if (formData.paymentMethod === 'now' && cardData) {
+    const ultimosDigitos = cardData.numero?.slice(-4) || '****';
+    doc.text(`Tarjeta: **** **** **** ${ultimosDigitos}`, 20, y); y += espacio;
+    doc.text(`Nombre en tarjeta: ${cardData.nombre}`, 20, y); y += espacio;
+    doc.text(`Vencimiento: ${cardData.fecha}`, 20, y); y += espacio;
+  }
+
+  // Separador final
+  doc.setDrawColor(150);
+  doc.line(20, y, 190, y); y += espacio;
+
+  // Mensaje final
+  doc.setFont('helvetica', 'italic');
+  doc.setFontSize(12);
+  doc.setTextColor(80, 80, 80);
+  doc.text("Gracias por elegirnos", 20, y); y += espacio;
+  doc.text("Consultas: 11-3456-7890", 20, y);
+
+  doc.save("turno_reserva.pdf");
+};
+
+
+ const handleSubmit = async (e) => {
   e.preventDefault();
-  
-    // Validar que se haya seleccionado un horario no ocupado
+
+  // Validar horario ocupado
   if (horariosOcupados.includes(formData.time)) {
     setErrors({ reservation: 'La hora seleccionada ya está ocupada. Por favor, elija otro horario.' });
     return;
   }
+
   if (cart.length === 0) {
     setErrors({ reservation: 'Debe seleccionar al menos un servicio' });
     return;
@@ -157,59 +236,69 @@ const handleSubmit = async (e) => {
     return;
   }
 
+  // Validación de datos de tarjeta si elige "Pagar ahora"
+  if (formData.paymentMethod === 'now') {
+    const { numero, nombre, fecha, cvv } = cardData;
+    if (!numero || !nombre || !fecha || !cvv) {
+      setErrors({ reservation: 'Completa todos los campos de la tarjeta para pagar online.' });
+      return;
+    }
+
+    if (numero.length < 12 || cvv.length !== 3) {
+      setErrors({ reservation: 'Datos de tarjeta inválidos.' });
+      return;
+    }
+
+    alert('Pago procesado correctamente ✔️');
+  }
+
   try {
-    // Asegurar formato ISO completo para horaInicio con segundos
+    // Formato de hora
     const horaInicioISO = formData.time.length === 5 ? formData.time + ':00' : formData.time;
 
-    // Mapear paymentMethod correctamente para que coincida con el enum backend
+    // Mapear método de pago al formato backend
     let metodoPagoBackend;
     switch (formData.paymentMethod.toLowerCase()) {
       case 'now':
-      case 'efectivo':
-        metodoPagoBackend = 'EFECTIVO';
-        break;
-      case 'tarjeta':
-      case 'tarjeta_credito':
-      case 'tarjeta de credito':
         metodoPagoBackend = 'TARJETA_CREDITO';
         break;
+      case 'later':
+        metodoPagoBackend = 'EFECTIVO';
+        break;
       default:
-        metodoPagoBackend = 'EFECTIVO'; // valor por defecto
+        metodoPagoBackend = 'EFECTIVO';
     }
-      console.log('user:', user);
-      console.log('user.id:', user?.id);
 
-      console.log('formData.empleadoId:', formData.empleadoId);
-      console.log('empleadoId parseado:', parseInt(formData.empleadoId));
-
-      console.log('cart:', cart);
-      console.log('servicioIds:', cart.map(s => s.id));
+    // Armar payload
     const payload = {
       clienteId: user.id,
       profesionalId: parseInt(formData.empleadoId),
       servicioIds: cart.map(s => s.id),
-      fecha: formData.date, // "YYYY-MM-DD"
-      horaInicio: horaInicioISO, // "HH:mm:ss"
+      fecha: formData.date,
+      horaInicio: horaInicioISO,
       estado: "PENDIENTE",
       metodoPago: metodoPagoBackend,
       pagado: false,
-      pagoWeb: metodoPagoBackend !== "EFECTIVO",
+      pagoWeb: metodoPagoBackend === "TARJETA_CREDITO",
       monto: cart.reduce((sum, s) => sum + s.precio, 0),
       detalle: cart.map(s => s.nombre).join(", ")
     };
 
-    console.log('Token:', token);
-    console.log('Payload:', payload);
-
+    // Enviar a backend
     await axios.post('http://localhost:8080/api/turnos', payload, axiosConfig);
 
+    // Generar PDF
+    generarPDFReserva();
+
     alert('Reserva confirmada');
-    // Limpiar o redirigir...
+    // Podés limpiar el formulario o redirigir si querés
+
   } catch (error) {
     console.error('Error al guardar turno:', error);
     setErrors({ reservation: 'Error al guardar la reserva' });
   }
 };
+
   const horariosDisponibles = [
     "09:00", "10:00", "11:00", "12:00",
     "13:00", "14:00", "15:00", "16:00", "17:00"
@@ -311,10 +400,10 @@ const handleSubmit = async (e) => {
             </div>
           </>
         )}
-
         <MetodoPago
           paymentMethod={formData.paymentMethod}
           handleChange={handleChange}
+          onCardDataChange={handleCardDataChange}
         />
 
         <ResumenReserva

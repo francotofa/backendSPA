@@ -11,15 +11,8 @@ const ResumenReserva = ({ cart, paymentMethod, date }) => {
     }, 0);
 
     let discount = 0;
-    if (paymentMethod === 'now' && date) {
-      const selectedDate = new Date(date);
-      const now = new Date();
-      const diffTime = selectedDate - now;
-      const diffHours = diffTime / (1000 * 60 * 60);
-
-      if (diffHours > 48) {
-        discount = subtotal * 0.15;
-      }
+    if (paymentMethod === 'now') {
+      discount = subtotal * 0.15;
     }
 
     const total = subtotal - discount;

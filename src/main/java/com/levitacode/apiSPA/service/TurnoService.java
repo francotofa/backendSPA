@@ -202,5 +202,8 @@ public class TurnoService {
     turno.setEstado(nuevoEstado);
     turnoRepository.save(turno);
 }
+public List<Turno> obtenerHistorialPorCliente(Long clienteId) {
+    return turnoRepository.findByClienteIdAndEstado(clienteId, EstadoTurno.FINALIZADO);
+}
 
 }

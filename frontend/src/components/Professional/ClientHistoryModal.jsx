@@ -1,35 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './ClientHistoryModal.module.css';
+import axios from 'axios';
 
-const ClientHistoryModal = ({ client, onClose }) => {
-  // Datos de ejemplo - en una app real vendrían de una API
-  const clientHistory = [
-    {
-      date: '2025-06-20',
-      service: 'Masaje relajante',
-      duration: '60 min',
-      professional: 'Profesional 1',
-      notes: 'El cliente reportó tensión en la espalda baja'
-    },
-    {
-      date: '2025-05-15',
-      service: 'Facial rejuvenecedor',
-      duration: '45 min',
-      professional: 'Profesional 2',
-      notes: 'Piel sensible, usar productos suaves'
-    }
-  ];
+const ClientHistoryModal = ({ client, clientId, onClose }) => {
+  const [clientHistory, setClientHistory] = useState([]);
+
+  useEffect(() => {
+    if (!clientId) return;
+
+    axios.get(`http://localhost:8080/api/turnos/cliente/${clientId}/historial`)
+      .then(res => setClientHistory(res.data))
+      .catch(err => console.error('Error al obtener historial:', err));
+  }, [clientId]);
 
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
         <div className={styles.modalHeader}>
           <h3>Historial de {client}</h3>
-          <button onClick={onClose} className={styles.closeButton}>
-            &times;
-          </button>
+          <button onClick={onClose} className={styles.closeButton}>&times;</button>
         </div>
-        
+
         {clientHistory.length === 0 ? (
           <p className={styles.noHistory}>No hay historial registrado</p>
         ) : (
@@ -38,17 +29,19 @@ const ClientHistoryModal = ({ client, onClose }) => {
               <div key={index} className={styles.historyItem}>
                 <div className={styles.sessionHeader}>
                   <span className={styles.sessionDate}>
-                    {new Date(session.date).toLocaleDateString()}
+                    {new Date(session.fecha).toLocaleDateString()}
                   </span>
-                  <span className={styles.sessionService}>{session.service}</span>
-                  <span className={styles.sessionDuration}>{session.duration}</span>
+                  <span className={styles.sessionService}>{session.detalle}</span>
+                  <span className={styles.sessionDuration}>
+                    {(session.servicios?.length || 1) * 60} min
+                  </span>
                 </div>
                 <p className={styles.sessionProfessional}>
-                  Profesional: {session.professional}
+                  Profesional: {session.profesional?.nombre || 'No disponible'}
                 </p>
-                {session.notes && (
+                {session.notas && (
                   <p className={styles.sessionNotes}>
-                    <strong>Notas:</strong> {session.notes}
+                    <strong>Notas:</strong> {session.notas}
                   </p>
                 )}
               </div>

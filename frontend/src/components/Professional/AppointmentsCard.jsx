@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPrint, faCheck, faHistory, faBan, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { useUser } from '../Context/UserContext';
 import styles from './AppointmentsCard.module.css';
+import jsPDF from 'jspdf';
 
 const AppointmentsCard = ({
   title,
@@ -19,12 +20,10 @@ const AppointmentsCard = ({
 }) => {
   const { user } = useUser();
   const [appointments, setAppointments] = useState([]);
-
   const formatDate = (date) => {
     const options = { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' };
     return new Date(date).toLocaleDateString('es-ES', options);
   };
-
   const formatTime = (hora) => {
     if (!hora) return '';
     const [hour, minute] = hora.split(':');
@@ -66,7 +65,6 @@ const handleCancel = async (turno) => {
   }
 };
 
-
   const handleComplete = async (turno) => {
     if (typeof onCompleteSession !== 'function') return;
 
@@ -78,7 +76,46 @@ const handleCancel = async (turno) => {
       alert('No se pudo completar el turno.');
     }
   };
+const generarPDFTurno = (t) => {
+  const doc = new jsPDF();
 
+  const fechaFormateada = new Date(t.fecha).toLocaleDateString('es-AR');
+  const horaFormateada = formatTime(t.horaInicio);
+  const cliente = t.cliente?.nombre || 'Desconocido';
+  const profesional = `${t.profesional?.nombre || 'Sin'} ${t.profesional?.apellido || 'profesional'}`;
+  const servicios = t.detalle || 'Sin detalles';
+  const estado = t.estado || 'PENDIENTE';
+  const metodoPago = t.metodoPago || 'No informado';
+  const duracion = (t.servicios?.length || 1) * 60;
+  const monto = t.monto || 0;
+  const idTurno = t.id || 'Desconocido';
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(16);
+  doc.text('Confirmación de Turno', 20, 25);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(12);
+  let y = 40;
+  const espacio = 10;
+
+  doc.text(`ID del Turno: ${idTurno}`, 20, y); y += espacio;
+  doc.text(`Cliente: ${cliente}`, 20, y); y += espacio;
+  doc.text(`Profesional: ${profesional}`, 20, y); y += espacio;
+  doc.text(`Fecha: ${fechaFormateada}`, 20, y); y += espacio;
+  doc.text(`Hora: ${horaFormateada}`, 20, y); y += espacio;
+  doc.text(`Servicios: ${servicios}`, 20, y); y += espacio;
+  doc.text(`Duración estimada: ${duracion} minutos`, 20, y); y += espacio;
+  doc.text(`Estado actual: ${estado}`, 20, y); y += espacio;
+  doc.text(`Método de pago: ${metodoPago}`, 20, y); y += espacio;
+  doc.text(`Monto total: $${monto}`, 20, y); y += espacio * 2;
+
+  doc.setFont('helvetica', 'italic');
+  doc.setTextColor(100);
+  doc.text("Gracias por utilizar el panel profesional.", 20, y);
+
+  doc.save(`turno_${cliente}_${fechaFormateada}.pdf`);
+};
   return (
     <div className={styles.card}>
       <div className={styles.cardHeader}>
@@ -129,7 +166,7 @@ const handleCancel = async (turno) => {
                       {showPrint && (
                         <button
                           className={`${styles.actionButton} ${styles.printButton}`}
-                          onClick={() => window.print()}
+                          onClick={() => generarPDFTurno(t)} // Generar PDF del turno
                         >
                           <FontAwesomeIcon icon={faPrint} />
                           <span>Imprimir</span>
