@@ -20,22 +20,37 @@ import { CarritoProvider } from './components/Context/CarritoContext';
 import PromoVideo from './components/PromoVideo/PromoVideo';
 import ReviewsSection from './components/Reviews/ReviewsSection';
 import Location from './components/Location/LocationMap';
-
-
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 // Componente wrapper modificado para mostrar Header y Footer en todas las páginas
 function LayoutWrapper({ children }) {
+  const location = useLocation();
+  const hideHeaderRoutes = ['/admin', '/professional'];
+
+  const shouldHideHeader = hideHeaderRoutes.includes(location.pathname);
+
   return (
     <>
-      <Header />
+      {!shouldHideHeader && <Header />}
       {children}
-      <Footer /> {/* Footer siempre visible */}
+      <Footer />
     </>
   );
 }
 
 function App() {
+
+useEffect(() => {
+        const script = document.createElement("script");
+        script.src = "https://www.chatbase.co/embed.min.js";
+        script.id = "a6Bqeo3zvuYzw7rafhQ6y";  // tu ID personalizado 
+        script.setAttribute("domain", "www.chatbase.co");
+        document.body.appendChild(script);
+    }, []);
+
   return (
+    
     <CarritoProvider>
 
       <Router>
